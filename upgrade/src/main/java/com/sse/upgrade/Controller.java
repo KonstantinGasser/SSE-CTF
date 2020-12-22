@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 public class Controller {
     @Autowired
@@ -18,8 +21,8 @@ public class Controller {
         return mav;
     }
 
-    @GetMapping("/rest")
-    public Person rest() {
-        return new Person("Franz", 32);
+    @GetMapping("/example/{name}")
+    public List<Map<String, Object>> example(@PathVariable("name") String name) {
+        return businessLogik.databaseZugriff(name);
     }
 }
