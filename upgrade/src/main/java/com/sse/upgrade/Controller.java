@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -12,20 +13,6 @@ import java.util.Map;
 
 @RestController
 public class Controller {
-    @Autowired
-    BusinessLogik businessLogik;
-
-    @GetMapping("/greeting/{name}")
-    public ModelAndView index(@PathVariable("name") String name) {
-        ModelAndView mav = new ModelAndView("index");
-        mav.addObject("name", name);
-        return mav;
-    }
-
-    @GetMapping("/example/{name}")
-    public List<Map<String, Object>> example(@PathVariable("name") String name) {
-        return businessLogik.databaseZugriff(name);
-    }
 
     @GetMapping("/studentNoten")
         public ModelAndView studentNoten() {
