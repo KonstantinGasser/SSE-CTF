@@ -1,6 +1,7 @@
 package com.sse.upgrade;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,4 +26,13 @@ public class Controller {
     public List<Map<String, Object>> example(@PathVariable("name") String name) {
         return businessLogik.databaseZugriff(name);
     }
+
+    @GetMapping("/{studentArray}")
+        public ModelAndView studentNoten(@PathVariable("studentArray") String[] studentArray) {
+            ModelAndView mav = new ModelAndView("studentNoten");
+            studentArray= new String[]{"Fani", "Obla", "Tim"};
+            mav.addObject("studentArray", studentArray);
+            return mav;
+        }
+
 }
