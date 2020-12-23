@@ -27,10 +27,10 @@ public class Controller {
         return businessLogik.databaseZugriff(name);
     }
 
-    @GetMapping("/{studentArray}")
-        public ModelAndView studentNoten(@PathVariable("studentArray") String[] studentArray) {
+    @GetMapping("/studentNoten")
+        public ModelAndView studentNoten() {
             ModelAndView mav = new ModelAndView("studentNoten");
-            studentArray= new String[]{"Fani", "Obla", "Tim"};
+            String[] studentArray= new String[]{"Fani", "Obla", "Tim"};
             mav.addObject("studentArray", studentArray);
             return mav;
         }
