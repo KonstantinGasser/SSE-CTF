@@ -1,5 +1,7 @@
 package com.sse.upgrade.example;
 
+import com.sse.upgrade.security.annotation.Professor;
+import com.sse.upgrade.security.annotation.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ public class ExampleController {
     @Autowired
     BusinessLogik businessLogik;
 
+    @Professor
     @GetMapping("/greeting/{name}")
     public ModelAndView index(@PathVariable("name") String name) {
         ModelAndView mav = new ModelAndView("index");
@@ -25,6 +28,7 @@ public class ExampleController {
     /**
      * localhost:8080/example/SSE
      */
+    @Student
     @GetMapping("/example/{name}")
     public List<Map<String, Object>> example(@PathVariable("name") String name) {
         return businessLogik.databaseZugriff(name);
