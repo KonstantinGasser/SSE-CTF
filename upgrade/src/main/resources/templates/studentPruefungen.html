@@ -12,7 +12,7 @@
 <div></div>
 <ul th:each="pruefung : ${angemPruefungen}">
     <li th:text="${pruefung}">
-        <button th:unless="${abmeldbarkeit}" class="hide" type="button" onclick="pruefungAbmelden()">Abmelden</button>
+        <button th:unless="${pruefung.abmeldbarCheck()}" class="hide" type="button" onclick="pruefungAbmelden()">Abmelden</button>
         <button type="button"> Ansehen</button>
 
     </li>

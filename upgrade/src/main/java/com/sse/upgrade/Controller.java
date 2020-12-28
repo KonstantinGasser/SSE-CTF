@@ -1,11 +1,7 @@
 package com.sse.upgrade;
 
-import model.Pruefung;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
+import com.sse.upgrade.model.Pruefung;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -27,17 +23,11 @@ public class Controller {
         public ModelAndView studentAngemPruefungen() {
             ModelAndView mav = new ModelAndView("studentPruefungen");
             ArrayList<Pruefung> angemPruefungen = new ArrayList<>();
-            model.Pruefung pr1 = new Pruefung("SSE", 21836, new Date(15012020));
+            com.sse.upgrade.model.Pruefung pr1 = new Pruefung("SSE", 21836, new Date());
             angemPruefungen.add(pr1);
             mav.addObject("angemPruefungen", angemPruefungen);
-        return mav;
+            return mav;
     }
 
-    @GetMapping("/studentAbmeldbarkeitPruefung")
-         public boolean studentAbmeldbarkeitPruefung(Pruefung prue){
-        ModelAndView mav = new ModelAndView("abmeldbarkeit");
-       boolean abmeldbarkeit=  prue.abmeldbarCheck();
-        return abmeldbarkeit;
-            }
 
 }
