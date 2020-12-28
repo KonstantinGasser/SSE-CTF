@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -29,10 +30,12 @@ public class Controller {
     public ModelAndView studentAngemPruefungen() {
         ModelAndView mav = new ModelAndView("studentPruefungen");
         ArrayList<Pruefung> angemPruefungen = new ArrayList<>();
-        model.Pruefung pr1 = new Pruefung();
+        model.Pruefung pr1 = new Pruefung("SSE", 21836, new Date(15012020));
         angemPruefungen.add(pr1);
         mav.addObject("angemPruefungen", angemPruefungen);
         return mav;
     }
+
+
 
 }
