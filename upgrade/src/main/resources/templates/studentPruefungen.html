@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <title>Student angemeldete Prüfungen</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href = "/css/main.css" >
+    <script type="text/javascript" src = "/js/actions.js"></script>
+
+</head>
+<body>
+<h1>Angemeldete Prüfungen vom Studenten</h1>
+<div></div>
+<ul th:each="pruefung : ${angemPruefungen}">
+    <li th:text="${pruefung}">
+        <button th:if="!abmeldbar()" class="hide" type="button" onclick="alertWirklichAbmelden()">Abmelden</button>
+        <button type="button"> Ansehen</button>
+
+    </li>
+</ul>
+
+
+</body>
+</html>

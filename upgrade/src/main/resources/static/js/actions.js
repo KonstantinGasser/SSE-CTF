@@ -1,0 +1,3 @@
+function abmeldbar(){
+return true;
+}
