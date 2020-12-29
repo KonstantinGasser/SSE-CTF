@@ -23,8 +23,11 @@ public class Controller {
         public ModelAndView studentAngemPruefungen() {
             ModelAndView mav = new ModelAndView("studentPruefungen");
             ArrayList<Pruefung> angemPruefungen = new ArrayList<>();
-            com.sse.upgrade.model.Pruefung pr1 = new Pruefung("SSE", 21836, new Date());
+            Pruefung pr1 = new Pruefung("SSE", 21836, new GregorianCalendar(2021, 1, 27, 16, 16, 47));
+            Pruefung pr2 = new Pruefung("SSE", 218355, new GregorianCalendar(2021, 1, 27, 19, 16, 47));
+
             angemPruefungen.add(pr1);
+            angemPruefungen.add(pr2);
             mav.addObject("angemPruefungen", angemPruefungen);
             return mav;
     }
