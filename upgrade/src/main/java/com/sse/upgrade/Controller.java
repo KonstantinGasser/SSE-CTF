@@ -1,6 +1,8 @@
 package com.sse.upgrade;
 
+import com.sse.upgrade.example.BusinessLogik;
 import com.sse.upgrade.model.Pruefung;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -9,11 +11,14 @@ import java.util.*;
 
 @RestController
 public class Controller {
+    @Autowired
+    BusinessLogik businessLogik;
 
     @GetMapping("/studentNoten")
         public ModelAndView studentNoten() {
             ModelAndView mav = new ModelAndView("studentNoten");
-            String[] studentArray= new String[]{"Fani", "Obla", "Tim"};
+            List<Object> studentArray= new LinkedList<>();
+            studentArray.add(businessLogik.databaseZugriff("SSE"));
             mav.addObject("studentArray", studentArray);
             return mav;
         }
