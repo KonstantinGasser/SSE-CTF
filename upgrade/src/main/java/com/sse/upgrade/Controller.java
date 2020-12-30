@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.sql.Timestamp;
 import java.util.*;
 
 @RestController
@@ -28,8 +29,9 @@ public class Controller {
         public ModelAndView studentAngemPruefungen() {
             ModelAndView mav = new ModelAndView("studentPruefungen");
             ArrayList<Pruefung> angemPruefungen = new ArrayList<>();
-            Pruefung pr1 = new Pruefung("SSE", 21836, new GregorianCalendar(2021, 1, 27, 16, 16, 47));
-            Pruefung pr2 = new Pruefung("SSE", 218355, new GregorianCalendar(2021, 1, 27, 19, 16, 47));
+
+            Pruefung pr1 = new Pruefung("SSE", 21836, new Timestamp(1490161712000L));
+            Pruefung pr2 = new Pruefung("SSE", 218355, new Timestamp(44444444000L));
 
             angemPruefungen.add(pr1);
             angemPruefungen.add(pr2);
