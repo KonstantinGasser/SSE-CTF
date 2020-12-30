@@ -12,7 +12,7 @@
 -- (1, 2, null),
 -- (2, 1, 'Das ist ein Comment');
 
-
+-- password is a md5 hash of 'helloworld' :)
 INSERT INTO hs_user (id, username, hs_id, password_hash) VALUES
     (0, 'Niklas', 'ST0', 'fc5e038d38a57032085441e7fe7010b0'),
     (1, 'Luis', 'ST1', 'fc5e038d38a57032085441e7fe7010b0'),
