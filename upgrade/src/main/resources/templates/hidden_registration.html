@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,24 +11,24 @@
 <body>
 
     <div class="container">
-        <form method="POST" action="/dev/only/users/create">
+        <form action="#" th:action="@{/users/create}" method="POST">
             <div class="w-25 mt-5 ml-auto mr-auto">
                 <div class="form-row">
                     <div class="form-group col">
-                        <input type="text" id="username" placeholder="username", class="form-control">
+                        <input type="text" name="username" placeholder="username", class="form-control">
                     </div>
                     <div class="form-group col">
-                        <input type="text" id="hs_id" placeholder="HS-ID", class="form-control">
+                        <input type="text" name="hs_id" placeholder="HS-ID", class="form-control">
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col">
-                        <input type="password" id="password" placeholder="password", class="form-control">
+                        <input type="password" name="password" placeholder="password", class="form-control">
                     </div>
                     <div class="form-group col">
-                        <select id="role" class="custom-select">
-                            <option selected value="role@student">Student</option>
-                            <option value="role@professor">Prof</option>
+                        <select name="role" class="custom-select">
+                            <option selected value="student">Student</option>
+                            <option value="professor">Prof</option>
                         </select>
                     </div>
                 </div>

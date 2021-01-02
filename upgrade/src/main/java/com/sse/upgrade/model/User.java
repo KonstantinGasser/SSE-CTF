@@ -70,4 +70,9 @@ public class User implements UserDetails {
             return name();
         }
     }
+
+    @Override
+    public String toString() {
+        return "Name: "+ this.username + " | Role: "+ this.roles.toString();
+    }
 }

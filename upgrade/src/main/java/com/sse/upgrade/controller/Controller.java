@@ -2,11 +2,15 @@ package com.sse.upgrade.controller;
 
 import com.sse.upgrade.example.BusinessLogik;
 import com.sse.upgrade.model.Pruefung;
+import com.sse.upgrade.model.User;
 import com.sse.upgrade.security.annotation.Pruefungsamt;
+import com.sse.upgrade.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,6 +21,9 @@ import java.util.*;
 public class Controller {
     @Autowired
     JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    UserService userService;
 
     @GetMapping("/studentNoten")
         public ModelAndView studentNoten() {
@@ -52,13 +59,11 @@ public class Controller {
 
     /*
         Server plain HTML File für hidden Registration-Page
-        Access only with Admin login
         Soll nur für uns Devs sein, um Account anlegen zu können.
         Um die Route zu sehen muss man eingeloggt sein.
         returns -> hidden_registration.html PostMapping onclick of submit form to createUser
      */
-//    @Pruefungsamt
-    @GetMapping("/dev/only/registration")
+    @GetMapping("/users/registration")
     public ModelAndView serveHiddenRegistration() {
         ModelAndView mav = new ModelAndView("hidden_registration");
         return mav;
@@ -66,22 +71,35 @@ public class Controller {
 
     /*
         Processing request um neuen User anzulegen
-        Access only with Admin login
         Soll nur für uns Devs sein, um Account anlegen zu können.
         Um die Route zu sehen muss man eingeloggt sein.
         returns -> hidden_registration.html PostMapping onclick of submit form to createUser
      */
-    class user_dev {
-        private String username;
-        private long hs_id;
-        private String role;
+    @PostMapping("/users/create")
+    public ModelAndView createUser(@RequestParam("username") String username, @RequestParam("hs_id") String hs_id,@RequestParam("role") String role, @RequestParam("password") String password) {
+        ModelAndView mv = new ModelAndView("global_msg");
+
+        if (username == null || hs_id == null || role == null || password == null || username == "" || hs_id == "" || role == "" || password == "") {
+            mv.addObject("statusCode", 400);
+            mv.addObject("statusMessage", "400 - This request stinks bad dude!");
+            return mv;
+        }
+
+        if (!userService.register(username, hs_id, role, password)) {
+            mv.addObject("statusCode", 500);
+            mv.addObject("statusMessage", "500 - Yes the backend team messed up ~ sry");
+            return mv;
+        }
+
+        mv.addObject("statusCode", 200);
+        mv.addObject("statusMessage", "200 - Welcome to the dark side " + username);
+        return mv;
     }
-//    @Pruefungsamt
-    @PostMapping("/devonlyuserscreate")
-    public ModelAndView createUser(user_dev user) {
-//        ModelAndView mav = new ModelAndView();
-        System.out.println(user);
-        return null;
+
+    @GetMapping("/users/all")
+    public ModelAndView getAllUser() {
+        ModelAndView mv = new ModelAndView("list.user");
+        return mv.addObject("users", userService.getAll());
     }
 
 }

@@ -13,11 +13,11 @@
 -- (2, 1, 'Das ist ein Comment');
 
 -- password is a md5 hash of 'helloworld' :)
-INSERT INTO hs_user (id, username, hs_id, password_hash) VALUES
-    (0, 'Niklas', 'ST0', 'fc5e038d38a57032085441e7fe7010b0'),
-    (1, 'Luis', 'ST1', 'fc5e038d38a57032085441e7fe7010b0'),
-    (2, 'Joni', 'PR0', 'fc5e038d38a57032085441e7fe7010b0'),
-    (3, 'Tino', 'PR1', 'fc5e038d38a57032085441e7fe7010b0');
+INSERT INTO hs_user (id, username, hs_id, password_hash, role) VALUES
+    (0, 'Niklas', 'ST0', 'fc5e038d38a57032085441e7fe7010b0', 'student'),
+    (1, 'Luis', 'ST1', 'fc5e038d38a57032085441e7fe7010b0', 'student'),
+    (2, 'Joni', 'PR0', 'fc5e038d38a57032085441e7fe7010b0', 'professor'),
+    (3, 'Tino', 'PR1', 'fc5e038d38a57032085441e7fe7010b0', 'professor');
 
 
 
