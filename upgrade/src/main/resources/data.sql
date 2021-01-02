@@ -27,12 +27,12 @@ INSERT INTO pruefung (id, kurs, dozent, due_date) VALUES
     (2, 'BDEA', 2, '2021-02-24'),
     (3, 'VS', 3, '2021-02-24');
 
-INSERT INTO teilnehmer (pruefung_id, user_id, note) VALUES
-    (0, 0, NULL),
-    (0, 1, NULL),
-    (3, 0, 2.7),
-    (3, 1, 1.3),
-    (1, 0, 3.7),
-    (2, 1, 2.0);
+INSERT INTO teilnehmer (pruefung_id, user_id, note, comment) VALUES
+    (0, 0, NULL, NULL),
+    (0, 1, NULL, NULL),
+    (3, 0, 2.7, 'good one'),
+    (3, 1, 1.3, 'nice job'),
+    (1, 0, 3.7, 'well well well'),
+    (2, 1, 2.0, 'okaisch lol');
 
 

@@ -37,6 +37,7 @@ CREATE TABLE teilnehmer (
     pruefung_id INT,
     user_id INT,
     note DECIMAL ,
+    comment VARCHAR(250),
     FOREIGN KEY(pruefung_id) REFERENCES pruefung(id),
     FOREIGN KEY(user_id) REFERENCES hs_user(id)
 );
