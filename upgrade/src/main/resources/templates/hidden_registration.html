@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf" crossorigin="anonymous"></script>
+    <title>Dev Only</title>
+</head>
+<body>
+
+    <div class="container">
+        <form method="POST" action="/dev/only/users/create">
+            <div class="w-25 mt-5 ml-auto mr-auto">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <input type="text" id="username" placeholder="username", class="form-control">
+                    </div>
+                    <div class="form-group col">
+                        <input type="text" id="hs_id" placeholder="HS-ID", class="form-control">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <input type="password" id="password" placeholder="password", class="form-control">
+                    </div>
+                    <div class="form-group col">
+                        <select id="role" class="custom-select">
+                            <option selected value="role@student">Student</option>
+                            <option value="role@professor">Prof</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-2 ml-auto mr-auto">
+                        <button class="btn btn-primary" type=""submit>Create</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

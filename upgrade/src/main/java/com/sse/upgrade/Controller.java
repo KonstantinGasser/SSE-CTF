@@ -2,8 +2,10 @@ package com.sse.upgrade;
 
 import com.sse.upgrade.example.BusinessLogik;
 import com.sse.upgrade.model.Pruefung;
+import com.sse.upgrade.security.annotation.Pruefungsamt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -39,5 +41,38 @@ public class Controller {
             return mav;
     }
 
+    /*
+        Server plain HTML File für hidden Registration-Page
+        Access only with Admin login
+        Soll nur für uns Devs sein, um Account anlegen zu können.
+        Um die Route zu sehen muss man eingeloggt sein.
+        returns -> hidden_registration.html PostMapping onclick of submit form to createUser
+     */
+//    @Pruefungsamt
+    @GetMapping("/dev/only/registration")
+    public ModelAndView serveHiddenRegistration() {
+        ModelAndView mav = new ModelAndView("hidden_registration");
+        return mav;
+    }
+
+    /*
+        Processing request um neuen User anzulegen
+        Access only with Admin login
+        Soll nur für uns Devs sein, um Account anlegen zu können.
+        Um die Route zu sehen muss man eingeloggt sein.
+        returns -> hidden_registration.html PostMapping onclick of submit form to createUser
+     */
+    class user_dev {
+        private String username;
+        private long hs_id;
+        private String role;
+    }
+//    @Pruefungsamt
+    @PostMapping("/devonlyuserscreate")
+    public ModelAndView createUser(user_dev user) {
+//        ModelAndView mav = new ModelAndView();
+        System.out.println(user);
+        return null;
+    }
 
 }
