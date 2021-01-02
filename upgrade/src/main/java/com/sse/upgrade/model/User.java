@@ -1,4 +1,4 @@
-package com.sse.upgrade.security;
+package com.sse.upgrade.model;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

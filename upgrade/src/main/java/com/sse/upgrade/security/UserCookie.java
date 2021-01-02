@@ -2,6 +2,7 @@ package com.sse.upgrade.security;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sse.upgrade.model.User;
 import org.springframework.security.authentication.BadCredentialsException;
 
 import javax.servlet.http.Cookie;
@@ -35,7 +36,7 @@ public class UserCookie extends Cookie {
         try {
             String value = new String(Base64.getDecoder().decode(cookie.getValue()));
             this.payload = objectMapper.readValue(value, Payload.class);
-        } catch (JsonProcessingException e) {
+        } catch (JsonProcessingException | IllegalArgumentException e) {
             throw new BadCredentialsException("Bad Cookie");
         }
 

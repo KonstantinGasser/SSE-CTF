@@ -1,5 +1,6 @@
 package com.sse.upgrade.security;
 
+import com.sse.upgrade.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;

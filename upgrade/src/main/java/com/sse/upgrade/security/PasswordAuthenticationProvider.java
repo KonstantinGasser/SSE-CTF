@@ -1,5 +1,7 @@
 package com.sse.upgrade.security;
 
+import com.sse.upgrade.model.User;
+import com.sse.upgrade.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

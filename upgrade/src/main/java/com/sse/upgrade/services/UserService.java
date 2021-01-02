@@ -1,5 +1,6 @@
-package com.sse.upgrade.security;
+package com.sse.upgrade.services;
 
+import com.sse.upgrade.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
