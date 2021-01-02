@@ -22,20 +22,11 @@ public class Pruefung {
 //checkt, ob es aktuell mehr oder gleich 24 Std vor der Prüfung sind
 public boolean abmeldbarCheck(){
     Instant now = Instant.now();
-    boolean zuspaet =
-            ( ! pruefungsZeit.toInstant().isBefore( now.minus( 24 , ChronoUnit.HOURS) ));
-    if(zuspaet){
-        return false;
-    }
-    return true;
+    return pruefungsZeit.toInstant().isBefore( now.minus( 24 , ChronoUnit.HOURS));
 }
 
 @Override
     public String toString(){
         return this.name;
 }
-
-
-
-
 }

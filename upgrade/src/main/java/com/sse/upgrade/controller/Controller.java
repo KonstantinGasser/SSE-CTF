@@ -29,7 +29,7 @@ public class Controller {
         }
     public List<Map<String, Object>> dbGibNoten(String name) {
         // VORSICHT! hier ist eine SQL Injection möglich
-        String sql = "select us.username as \"Name\",te.note as \"Note\",pr.kurs as \"Fach\" from(( teilnehmer te JOIN  pruefung pr ON pr.idd = te.pruefung_id)JOIN hs_user us ON us.id = te.user_id )where us.username= \"Niklas\"";
+        String sql = "select us.username as \"Name\",te.note as \"Note\",pr.kurs as \"Fach\" from(( teilnehmer te JOIN  pruefung pr ON pr.id = te.pruefung_id)JOIN hs_user us ON us.id = te.user_id )where us.username= 'Niklas'";
         System.out.println(sql);
         //System.out.println(jdbcTemplate.queryForList(sql));
         return jdbcTemplate.queryForList(sql);
