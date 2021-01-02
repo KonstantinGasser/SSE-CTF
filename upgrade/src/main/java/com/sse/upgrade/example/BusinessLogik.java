@@ -19,6 +19,7 @@ public class BusinessLogik {
         // VORSICHT! hier ist eine SQL Injection möglich
         String sql = "select * from note inner join pruefung on note.pruefung_id = pruefung.id where pruefung.name = '"+name+"'";
         System.out.println(sql);
+        //System.out.println(jdbcTemplate.queryForList(sql));
         return jdbcTemplate.queryForList(sql);
     }
 }
