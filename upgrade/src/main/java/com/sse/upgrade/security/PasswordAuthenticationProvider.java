@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,17 +19,13 @@ public class PasswordAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-//        String name = authentication.getName();
-//        String password = authentication.getCredentials().toString();
-//        System.out.println(name+password);
-//        Token token = userService.login(name, password);
-//        token.setAuthenticated(true);
-//        return token;
-        List<GrantedAuthority> g = new LinkedList<>();
-        g.add(User.Role.PROFESSOR);
+        String name = authentication.getName();
+        String password = authentication.getCredentials().toString();
+        User user = userService.login(name, password);
         String secret = UUID.randomUUID().toString();
         cookieRepository.startSession(secret);
-        return new CookieAuthentication(new User("Günther", User.Role.PROFESSOR), secret, g);
+        List<GrantedAuthority> authorities = (List<GrantedAuthority>) user.getAuthorities();
+        return new CookieAuthentication(user, secret, authorities);
     }
 
     @Override

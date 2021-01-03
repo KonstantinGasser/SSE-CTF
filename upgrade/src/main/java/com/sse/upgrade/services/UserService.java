@@ -1,15 +1,23 @@
 package com.sse.upgrade.services;
 
 import com.sse.upgrade.model.User;
+import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
+import java.sql.PreparedStatement;
 
 @Service
 public class UserService {
@@ -28,8 +36,14 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User login(String username, String password) {
-        // TODO: proper credentials check
-        return new User("max", User.Role.PROFESSOR);
+        String sql = "select * from hs_user where username = ?";
+        List<User> users = jdbcTemplate.query(sql, new UserRowMapper(), username);
+        String pwHash = DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8));
+        for ( User user : users) {
+            if (user.getPassword().equals(pwHash) && user.getUsername().equals(username))
+                return user;
+        }
+        throw new BadCredentialsException("Username or Password incorrect");
     }
 
 
@@ -49,16 +63,18 @@ public class UserService {
 
 
     class UserRowMapper implements RowMapper {
-
         @Override
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
             String username = resultSet.getString(3);
             String role = resultSet.getString(5);
+            String pw = resultSet.getString(4);
             switch (role) {
+                case "pruefungsamt":
+                    return new User(username, pw, User.Role.PRUEFUNGSAMT);
                 case "professor":
-                    return new User(username, User.Role.PROFESSOR);
+                    return new User(username, pw, User.Role.PROFESSOR);
                 default:
-                    return new User(username, User.Role.STUDENT);
+                    return new User(username, pw, User.Role.STUDENT);
             }
         }
     }

@@ -9,11 +9,13 @@ import java.util.LinkedList;
 public class User implements UserDetails {
     private Collection<Role> roles;
     private String username;
+    private String password;
 
-    public User(String username, Role role) {
+    public User(String username, String pwhash, Role role) {
         this.roles = new LinkedList<>();
         this.roles.add(role);
         this.username = username;
+        this.password = pwhash;
     }
 
     public User(String username, Collection<Role> roles) {
@@ -32,7 +34,7 @@ public class User implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
