@@ -14,6 +14,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class PruefungService {
@@ -26,13 +28,10 @@ public class PruefungService {
     }
 
 
-    @Transactional
-    public Pruefung getPruefungByID(int prID){
-        String sql= "select (id, kurs, dozent, due_date) from pruefung where id = " + prID;
-        System.out.println("DeBug3");
-        System.out.println(jdbcTemplate.queryForObject(sql, Pruefung.class).toString());
-        return jdbcTemplate.queryForObject(sql, Pruefung.class);
-
+    @Transactional(readOnly = true)
+    public Pruefung getPruefungById(int id) {
+        return jdbcTemplate.queryForObject(
+                "select * from pruefung where id=?", new PruefungRowMapper(), id);
     }
 
 
@@ -49,18 +48,12 @@ public class PruefungService {
     }
     @Transactional
     public boolean abmelden(int studentID, int pruefungID){
-        System.out.println("DeBug1");
-        String sql = "DELETE FROM teilnehmer WHERE pruefung_id = ? and user_Id=?";
-        System.out.println("DeBug2");
-        Pruefung pruefung = getPruefungByID(pruefungID);
+        Pruefung pruefung = getPruefungById(pruefungID);
 
         if(pruefung.abmeldbarCheck()) {
-            //TODO pruefung auf abmeldbarkeit checken
-            /* dazu: gmethode getpruefung by ID */
             pruefung.abmeldbarCheck();
-
-
             try {
+                String sql = "DELETE FROM teilnehmer WHERE pruefung_id = ? and user_Id=?";
                 return jdbcTemplate.update(sql, pruefungID, studentID) == 1;
             } catch (Exception e) {
                 return false;
@@ -73,22 +66,19 @@ public class PruefungService {
         @Override
         public Pruefung mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-            int id= rs.getInt("id");
-            String kurs = rs.getString("kurs");
-            int dozent = rs.getInt("dozent");
 
             String dueDate = rs.getString("due_date");
-            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date date = null;
             try {
-                date = dateFormat.parse("pruefungsZeit");
+                date = dateFormat.parse(dueDate);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
             long time = date.getTime();
             Timestamp timestamp = new Timestamp(time);
 
-            return new Pruefung(id,kurs,dozent,timestamp);
+            return new Pruefung(rs.getInt("id"),rs.getString("kurs"),rs.getInt("dozent"),timestamp);
         }
 
 

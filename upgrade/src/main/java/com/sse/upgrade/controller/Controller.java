@@ -228,7 +228,9 @@ public class Controller {
         public ModelAndView studentAnmelden(@PathVariable("PRid") int pruefungsID) {
             ModelAndView mav = new ModelAndView("redirect:/pruefungen");
             User user= userService.getLoggedInUser();
-            System.out.println("Student mit ID" + user.getId() + "zu Pruefung" + pruefungsID + "angemeldet");
+            pruefungService.anmelden(pruefungsID,user.getId());
+
+        System.out.println("Student mit ID" + user.getId() + "zu Pruefung " + pruefungsID + " angemeldet");
 
             return mav;
     }
@@ -238,7 +240,7 @@ public class Controller {
         ModelAndView mav = new ModelAndView("redirect:/pruefungen");
         User user= userService.getLoggedInUser();
         pruefungService.abmelden(pruefungsID,user.getId());
-        System.out.println("Student mit ID" + user.getId() + "zu Pruefung" + pruefungsID + "abgemeldet");
+        System.out.println("Student mit ID" + user.getId() + " von Pruefung" + pruefungsID + " abgemeldet");
 
         return mav;
     }
