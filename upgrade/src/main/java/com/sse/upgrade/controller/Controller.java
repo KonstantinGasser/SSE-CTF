@@ -8,6 +8,7 @@ import com.sse.upgrade.security.annotation.Professor;
 import com.sse.upgrade.security.annotation.Pruefungsamt;
 import com.sse.upgrade.security.annotation.Student;
 import com.sse.upgrade.services.NotenService;
+import com.sse.upgrade.services.PruefungService;
 import com.sse.upgrade.services.UserService;
 import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,8 @@ public class Controller {
     UserService userService;
     @Autowired
     NotenService notenService;
+    @Autowired
+    PruefungService pruefungService;
 
     /*
     Index file:
@@ -221,18 +224,23 @@ public class Controller {
     }
 
 
-    @GetMapping("/studentAngemPruefungen")
-        public ModelAndView studentAngemPruefungen() {
-            ModelAndView mav = new ModelAndView("studentPruefungen");
-            ArrayList<Pruefung> angemPruefungen = new ArrayList<>();
+    @GetMapping("/studentAnmelden/{PRid}")
+        public ModelAndView studentAnmelden(@PathVariable("PRid") int pruefungsID) {
+            ModelAndView mav = new ModelAndView("redirect:/pruefungen");
+            User user= userService.getLoggedInUser();
+            System.out.println("Student mit ID" + user.getId() + "zu Pruefung" + pruefungsID + "angemeldet");
 
-            Pruefung pr1 = new Pruefung("SSE", 21836, new Timestamp(1490161712000L));
-            Pruefung pr2 = new Pruefung("SSE", 218355, new Timestamp(44444444000L));
-
-            angemPruefungen.add(pr1);
-            angemPruefungen.add(pr2);
-            mav.addObject("angemPruefungen", angemPruefungen);
             return mav;
+    }
+
+    @GetMapping("/studentAbmelden/{PRid}")
+    public ModelAndView studentAbmelden(@PathVariable("PRid") int pruefungsID) {
+        ModelAndView mav = new ModelAndView("redirect:/pruefungen");
+        User user= userService.getLoggedInUser();
+        pruefungService.abmelden(pruefungsID,user.getId());
+        System.out.println("Student mit ID" + user.getId() + "zu Pruefung" + pruefungsID + "abgemeldet");
+
+        return mav;
     }
 
 

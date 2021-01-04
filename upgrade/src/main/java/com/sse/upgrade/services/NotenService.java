@@ -105,7 +105,7 @@ public class NotenService {
 
         List<Map<String, Object>> kurse = this.jdbcTemplate.queryForList(sqlPru);
         List<Map<String, Object>> ang = this.jdbcTemplate.queryForList(sqlAn, ID);
-        List<Map<String, String>> res = new ArrayList<Map<String, String>>();
+        List<Map<String, String>> res = new ArrayList<>();
 
         for(Map<String, Object> map : kurse) {
             int pID =  (int) map.get("pruefung_id");

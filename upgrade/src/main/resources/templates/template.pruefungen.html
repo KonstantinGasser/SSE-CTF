@@ -27,8 +27,8 @@
             <td scope="row" th:text="${res.get('name')}"></td>
             <td th:text="${res.get('user')}"></td>
             <td>
-                <button class="btn btn-success" th:if="${res.get('isAngemeldet') == '0'}" th:text="'anmelden'"></button><-- /anmelden/1 -->
-                <button class="btn btn-danger" th:if="${res.get('isAngemeldet') == '1'}" th:text="'abmelden'"></button>
+                <a class="btn btn-success" th:if="${res.get('isAngemeldet') == '0'}" th:text="'anmelden'" th:href="@{/studentAnmelden/{PRid}(PRid=${res.get('pruefung_id')})}" ></a><-- /anmelden/1 -->
+                <a class="btn btn-danger" th:if="${res.get('isAngemeldet') == '1'}" th:text="'abmelden'" th:href="@{/studentAbmelden/{PRid}(PRid=${res.get('pruefung_id')})}" ></a>
             </td>
         </tr>
         </tbody>

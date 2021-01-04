@@ -1,20 +1,22 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" >
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
 <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf" crossorigin="anonymous"></script>
     <title>Student angemeldete Prüfungen</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" type="text/css" href = "../static/css/styles.css" >
-    <script type="text/javascript" src = "../static/js/actions.js"></script>
 
 </head>
 <body>
 <h1>Angemeldete Prüfungen vom Studenten</h1>
 <div></div>
-<ul th:unless="${angemPruefungen.size()>0}" class="hide" th:each="pruefung : ${angemPruefungen}">
+<ul  th:each="pruefung : ${angemPruefungen}">
     <li th:text="${pruefung.toString()}">
-        <button th:unless="${pruefung.abmeldbarCheck()}" class="hide" type="button" onclick="pruefungAbmelden()">Abmelden</button>
-        <button type="button"> Ansehen</button>
     </li>
+    <button th:if="${pruefung.abmeldbarCheck()}"  type="button" th:onclick="${pruefung.abmelden()}">Abmelden</button>
+    <button type="button"> Ansehen</button>
 </ul>
 
 
