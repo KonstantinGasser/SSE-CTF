@@ -4,7 +4,9 @@ import com.sse.upgrade.example.BusinessLogik;
 import com.sse.upgrade.model.Note;
 import com.sse.upgrade.model.Pruefung;
 import com.sse.upgrade.model.User;
+import com.sse.upgrade.security.annotation.Professor;
 import com.sse.upgrade.security.annotation.Pruefungsamt;
+import com.sse.upgrade.security.annotation.Student;
 import com.sse.upgrade.services.NotenService;
 import com.sse.upgrade.services.UserService;
 import org.dom4j.rule.Mode;
@@ -12,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.sql.Timestamp;
@@ -38,27 +37,35 @@ public class Controller {
      */
     @GetMapping("/")
     public ModelAndView serveIndex() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.getLoggedInUser();
 
         ModelAndView mav = new ModelAndView("template.home");
-        mav.addObject("username", "Konstantin");
+        mav.addObject("permission", user.getRoles().contains(User.Role.PROFESSOR) ? "prof": "student");
+        mav.addObject("username", user.getUsername());
         return mav;
     }
-
+    @Student
     @GetMapping("/noten")
     public ModelAndView serveNoten() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.getLoggedInUser();
         ModelAndView mav = new ModelAndView("template.noten");
 
+        mav.addObject("permission", user.getRoles().contains(User.Role.PROFESSOR) ? "prof": "student");
         // get noten of user
         // TODO: change hard coded ID to authed user id
-        List<Note> noten = notenService.getUserNoten("1");
+        List<Note> noten = notenService.getUserNoten(String.valueOf(user.getId()));
 
-        mav.addObject("username", "Konstantin");
+        // set noten for given user
+        mav.addObject("username", user.getUsername());
         mav.addObject("noten", noten);
 
+        // if user is prof set allowed kurs for adding
         if (user.getRoles().contains(User.Role.PROFESSOR)) {
+            List<String> kurse = notenService.getNotenByProf("2");
+
             mav.addObject("canAddGrade", true);
+            mav.addObject("allowedKurse", kurse);
+
         } else {
             mav.addObject("canAddGrade", false);
         }
@@ -71,15 +78,16 @@ public class Controller {
     einzutragen. Wenn der user falsche Eingaben macht wird eine error template returned
     TODO: call NotenService (write function in NotenService to process data)
      */
+    @Professor
     @PostMapping("/noten/add")
-    public ModelAndView addNewGrade(@RequestParam("kurs") String k, @RequestParam("for_id") String forID, @RequestParam("note") double note) {
-        if (k == null || k == "" || forID == null || forID == "" ||  note <= 0.0 || note >5.0) {
+    public ModelAndView addNewGrade(@RequestParam("kurs") String k, @RequestParam("for_id") String forID, @RequestParam("note") double note, @RequestParam("comment") String c) {
+        if (k == null || k.equals("") || forID == null || forID.equals("") ||  note <= 0.0 || note >5.0) {
             ModelAndView mav = new ModelAndView("global_msg");
             mav.addObject("statusCode", 400);
             mav.addObject("statusMessage", "Fields are not correct");
             return mav;
         }
-        System.out.println(" "+k+" "+forID+" "+note);
+        System.out.println(" "+k+" "+forID+" "+note+" "+c);
         return new ModelAndView("redirect:/noten");
     }
 
@@ -88,10 +96,29 @@ public class Controller {
     Actions:
         - Anzeigen von Noten
      */
-
+    @Student
     @GetMapping("/pruefungen")
     public ModelAndView servePruefungen() {
-        ModelAndView mav = new ModelAndView("template.pruefungen.html");
+        ModelAndView mav = new ModelAndView("template.pruefungen");
+
+        User user = userService.getLoggedInUser();
+
+        List<Map<String, String>> liste = notenService.getPruefungAndAngemelded(user.getId());
+        mav.addObject("pruefungen", liste);
+        return mav;
+    }
+
+
+
+    @Professor
+    @GetMapping("/pruegunf/prof")
+    public ModelAndView servePruefungProf() {
+        User user = userService.getLoggedInUser();
+        ModelAndView mav = new ModelAndView("template.pruefung.prof");
+        mav.addObject("username", user.getUsername());
+
+        List<Map<String, Object>> liste = notenService.getPruefungProf(user.getId());
+        mav.addObject("results", liste);
         return mav;
     }
 
@@ -117,7 +144,7 @@ public class Controller {
     public ModelAndView createUser(@RequestParam("username") String username, @RequestParam("hs_id") String hs_id,@RequestParam("role") String role, @RequestParam("password") String password) {
         ModelAndView mv = new ModelAndView("global_msg");
 
-        if (username == null || hs_id == null || role == null || password == null || username == "" || hs_id == "" || role == "" || password == "") {
+        if (username == null || hs_id == null || role == null || password == null || username.equals("") || hs_id.equals("") || role.equals("") || password.equals("")) {
             mv.addObject("statusCode", 400);
             mv.addObject("statusMessage", "400 - This request stinks bad dude!");
             return mv;

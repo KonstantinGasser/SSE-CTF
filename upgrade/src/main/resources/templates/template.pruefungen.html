@@ -35,5 +35,29 @@
         </form>
     </div>
 </nav>
+
+<div class="container mt-5">
+    <h2>Prüfungs Übersicht</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Kurs</th>
+            <th>Professor</th>
+            <th>Action</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="res : ${pruefungen}">
+            <td scope="row" th:text="${res.get('name')}"></td>
+            <td th:text="${res.get('user')}"></td>
+            <td>
+                <button class="btn btn-success" th:if="${res.get('isAngemeldet') == '0'}" th:text="'anmelden'"></button><-- /anmelden/1 -->
+                <button class="btn btn-danger" th:if="${res.get('isAngemeldet') == '1'}" th:text="'abmelden'"></button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 </body>
 </html>

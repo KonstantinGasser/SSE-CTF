@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
@@ -61,7 +62,6 @@ public class UserService {
         return jdbcTemplate.query("select * from hs_user", new UserRowMapper());
     }
 
-
     class UserRowMapper implements RowMapper {
         @Override
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -78,5 +78,10 @@ public class UserService {
                     return new User(id, username, pw, User.Role.STUDENT);
             }
         }
+    }
+
+
+    public User getLoggedInUser() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

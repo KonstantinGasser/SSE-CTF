@@ -37,7 +37,7 @@
             margin: auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 80%;
+            width: 70%;
         }
 
         /* The Close Button */
@@ -99,13 +99,20 @@
                 <form action="#" th:action="@{/noten/add}" method="POST">
                     <div class="form-row">
                         <div class="form-group col-4">
-                            <input class="form-control" name="kurs" placeholder="Kurs Kürzel">
+                            <select name="kurs" class="custom-select">
+                                <option th:each="kurs : ${allowedKurse}" th:value="${kurs}" th:text="${kurs}"></option>
+                            </select>
                         </div>
                         <div class="form-group col-4">
                             <input class="form-control" name="note" placeholder="Note des Studenten">
                         </div>
                         <div class="form-group col-4">
                             <input class="form-control" name="for_id" placeholder="Matrikelnummer">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <textarea class="form-control" name="comment" rows="3" placeholder="Comment"></textarea>
                         </div>
                     </div>
                     <div class="form-row">
@@ -131,8 +138,10 @@
             <tr th:each="res : ${noten}" th:attr="class=${res.getNote() == 0.0 ? 'status-yellow' : 'status-green'}">
                 <td scope="row" th:text="${res.getKurs()}"></td>
                 <td th:text="${res.getProf()}"></td>
-                <td th:text="${res.getNote()}"></td>
-                <td th:text="${res.getComment()}"></td>
+                <td th:if="${res.getNote() == 0.0}"></td>
+                <td th:if="${res.getNote() != 0.0}" th:text="${res.getNote()}"></td>
+                <td th:if="${res.getNote() == 0.0}" th:text="'Angemeldet'"></td>
+                <td th:if="${res.getNote() != 0.0}" th:text="${res.getComment()}"></td>
             </tr>
             </tbody>
         </table>

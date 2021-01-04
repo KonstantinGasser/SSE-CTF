@@ -22,12 +22,8 @@
                     <span class="sr-only">(current)</span>
                 </a>
             </li>
-            <li th:if="${permission.equals('student')}" class="nav-item">
-                <a class="nav-link" th:href="@{/noten}">Noten Ansicht</a>
-            </li>
             <li class="nav-item">
-                <a th:if="${permission.equals('student')}" class="nav-link " th:href="@{/pruefungen}">Prüfungen</a>
-                <a th:if="${permission.equals('prof')}" class="nav-link" th:href="@{/pruefungen/prof}">Prüfungen</a>
+                <a class="nav-link" th:href="@{/pruefungen/prof}">Prüfungen</a>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0">
@@ -37,11 +33,25 @@
     </div>
 </nav>
 <div class="container mt-5">
-    <div class="form-row">
-        <div class="form-group col-2 ml-auto">
-            <div class="alert alert-primary" th:text="'Hello ' + ${username}"></div>
-        </div>
-    </div>
+    <h2>Prüfungs Übersicht</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Kurs</th>
+            <th>Datum</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="res : ${results}">
+            <td scope="row" th:text="${res.get('kurs')}"></td>
+            <td th:text="${res.get('due_date')}"></td>
+            <td>
+                <button class="btn btn-danger" th:if="${res.get('isAngemeldet') == '1'}" th:text="'abmelden'"></button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </div>
 
 </body>

@@ -44,5 +44,6 @@ CREATE TABLE teilnehmer (
 );
 
 
+-- select hs_user.username from teilnehmer left join pruefung on teilnehmer.pruefung_id=pruefung.id
 
 
