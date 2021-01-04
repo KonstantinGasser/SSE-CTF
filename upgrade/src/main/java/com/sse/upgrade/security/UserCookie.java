@@ -68,6 +68,7 @@ public class UserCookie extends Cookie {
         public Payload() {}
 
         public Payload(int id, String secret, String username, String password, Collection<User.Role> roles) {
+            this.id = id;
             this.password = password;
             this.secret = secret;
             this.username = username;

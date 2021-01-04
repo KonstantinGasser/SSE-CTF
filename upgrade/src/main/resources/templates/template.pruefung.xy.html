@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -37,20 +37,34 @@
     <table class="table">
         <thead>
         <tr>
-            <th>Kurs</th>
-            <th>Datum</th>
+            <th>#</th>
+            <th>Student</th>
+            <th>Note</th>
+            <th>Comment</th>
             <th>Action</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="res : ${results}">
-            <td scope="row" th:text="${res.get('kurs')}"></td>
-            <td th:text="${res.get('due_date')}"></td>
-            <td>
-                <button class="btn btn-primary">
-                    <a th:href="@{/pruefung/show/{id}(id=${res.get('id')})}" th:text="'bearbeiten'"></a>
-                </button>
-            </td>
+            <form action="#" th:action="@{/noten/add}" method="POST"> <!-- post with user_id-pruefung_id -->
+                <td scope="row" th:text="${res.get('uID')}"></td>
+                <td th:text="${res.get('u')}"></td>
+                <td th:if="${res.get('n') != null}" th:text="${res.get('n')}"></td>
+                <td th:if="${res.get('n') == null}">
+                    <input class="form-control" type="number" step="any" name="note" placeholder="Note">
+                    <input type="hidden" name="uuid" th:value="${res.get('uID')}">
+                    <input type="hidden" name="kurs" th:value="${_for}">
+                </td>
+                <td th:if="${res.get('c') != null}">
+                    <input class="form-control" disabled th:value="${#strings.unescapeJava(res.get('c'))}">
+                </td>
+                <td th:if="${res.get('c') == null}">
+                    <textarea class="form-control" name="comment" placeholder="Comment zur Note"></textarea>
+                </td>
+                <td>
+                    <button th:if="${res.get('n') == null}" class="btn btn-primary" type="submit" th:text="'update'"></button>
+                </td>
+            </form>
         </tr>
         </tbody>
     </table>

@@ -76,20 +76,20 @@ public class Controller {
     /*
     add noten nimmt die request form und leitet diese weiter an den NotenService um die Note
     einzutragen. Wenn der user falsche Eingaben macht wird eine error template returned
-    TODO: call NotenService (write function in NotenService to process data)
-     */
-    @Professor
-    @PostMapping("/noten/add")
-    public ModelAndView addNewGrade(@RequestParam("kurs") String k, @RequestParam("for_id") String forID, @RequestParam("note") double note, @RequestParam("comment") String c) {
-        if (k == null || k.equals("") || forID == null || forID.equals("") ||  note <= 0.0 || note >5.0) {
-            ModelAndView mav = new ModelAndView("global_msg");
-            mav.addObject("statusCode", 400);
-            mav.addObject("statusMessage", "Fields are not correct");
-            return mav;
-        }
-        System.out.println(" "+k+" "+forID+" "+note+" "+c);
-        return new ModelAndView("redirect:/noten");
-    }
+//    TODO: call NotenService (write function in NotenService to process data)
+//     */
+//    @Professor
+//    @PostMapping("/noten/add")
+//    public ModelAndView addNewGrade(@RequestParam("kurs") String k, @RequestParam("for_id") String forID, @RequestParam("note") double note, @RequestParam("comment") String c) {
+//        if (k == null || k.equals("") || forID == null || forID.equals("") ||  note <= 0.0 || note >5.0) {
+//            ModelAndView mav = new ModelAndView("global_msg");
+//            mav.addObject("statusCode", 400);
+//            mav.addObject("statusMessage", "Fields are not correct");
+//            return mav;
+//        }
+//        System.out.println(" "+k+" "+forID+" "+note+" "+c);
+//        return new ModelAndView("redirect:/noten");
+//    }
 
     /*
     Entry point to show logged in user actions for notes
@@ -111,7 +111,7 @@ public class Controller {
 
 
     @Professor
-    @GetMapping("/pruegunf/prof")
+    @GetMapping("/pruefungen/prof")
     public ModelAndView servePruefungProf() {
         User user = userService.getLoggedInUser();
         ModelAndView mav = new ModelAndView("template.pruefung.prof");
@@ -120,6 +120,41 @@ public class Controller {
         List<Map<String, Object>> liste = notenService.getPruefungProf(user.getId());
         mav.addObject("results", liste);
         return mav;
+    }
+
+    @Professor
+    @GetMapping("/pruefung/show/{id}")
+    public ModelAndView serveSinglePruefung(@PathVariable("id") String id) {
+
+        User user = userService.getLoggedInUser();
+        ModelAndView mav = new ModelAndView("template.pruefung.xy");
+        mav.addObject("_for", id);
+        List<Map<String, Object>> liste = notenService.getPruefunAndStuden(id);
+        mav.addObject("results", liste);
+        mav.addObject("username", user.getUsername());
+
+        return mav;
+    }
+
+    @Professor
+    @PostMapping("/noten/add")
+    public ModelAndView addNote(@RequestParam("uuid")String uuid, @RequestParam("kurs") String kurs, @RequestParam("note") double note, @RequestParam("comment") String comment) {
+        User user =  userService.getLoggedInUser();
+        ModelAndView mav = new ModelAndView("global_msg");
+        String redirect = "/pruefung/show/"+kurs;
+        mav.addObject("redirect", redirect);
+        System.out.println(comment);
+        boolean success = notenService.updateNote(uuid, comment, note);
+
+        if (success) {
+            mav.addObject("statusCode", 200);
+            mav.addObject("statusMessage", "Note updated");
+            return mav;
+        }
+        mav.addObject("statusCode", 400);
+        mav.addObject("statusMessage", "ups");
+        return mav;
+
     }
 
     /*

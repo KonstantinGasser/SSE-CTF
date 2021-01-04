@@ -66,6 +66,7 @@ public class UserService {
         @Override
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
             int id = resultSet.getInt(1);
+
             String username = resultSet.getString(3);
             String role = resultSet.getString(5);
             String pw = resultSet.getString(4);

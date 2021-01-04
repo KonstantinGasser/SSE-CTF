@@ -68,9 +68,33 @@ public class NotenService {
         }
     }
 
+    public Boolean updateNote(String student, String comment, double note) {
+        String sql = "update teilnehmer set note=?, comment=? where user_id=?";
+
+        try {
+            this.jdbcTemplate.update(sql, note, comment, student);
+        } catch(org.springframework.dao.DataAccessException err) {
+            System.out.println(err);
+            return false;
+        }
+        return true;
+    }
+
+    /*
+    Returns list of all students part of a pruefung
+     */
+    @Transactional(readOnly = true)
+    public List<Map<String, Object>> getPruefunAndStuden(String ID) {
+        String sql = "select hs_user.username as u, hs_user.id as uID, teilnehmer.comment as c, teilnehmer.note as n from teilnehmer" +
+                " inner join hs_user on teilnehmer.user_id=hs_user.id" +
+                " where teilnehmer.pruefung_id=?";
+        return this.jdbcTemplate.queryForList(sql, ID);
+    }
+
     @Transactional(readOnly = true)
     public List<Map<String, Object>> getPruefungProf(int ID) {
-        String sql = "select * from pruefung where dozent?";
+        System.out.println(ID);
+        String sql = "select * from pruefung where dozent=?";
         return this.jdbcTemplate.queryForList(sql, ID);
     }
 
