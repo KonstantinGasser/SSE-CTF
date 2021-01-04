@@ -65,16 +65,17 @@ public class UserService {
     class UserRowMapper implements RowMapper {
         @Override
         public User mapRow(ResultSet resultSet, int i) throws SQLException {
+            int id = resultSet.getInt(1);
             String username = resultSet.getString(3);
             String role = resultSet.getString(5);
             String pw = resultSet.getString(4);
             switch (role) {
                 case "pruefungsamt":
-                    return new User(username, pw, User.Role.PRUEFUNGSAMT);
+                    return new User(id, username, pw, User.Role.PRUEFUNGSAMT);
                 case "professor":
-                    return new User(username, pw, User.Role.PROFESSOR);
+                    return new User(id, username, pw, User.Role.PROFESSOR);
                 default:
-                    return new User(username, pw, User.Role.STUDENT);
+                    return new User(id, username, pw, User.Role.STUDENT);
             }
         }
     }

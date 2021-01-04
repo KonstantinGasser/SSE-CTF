@@ -10,15 +10,19 @@ public class User implements UserDetails {
     private Collection<Role> roles;
     private String username;
     private String password;
+    private int id;
 
-    public User(String username, String pwhash, Role role) {
+    public User(int id, String username, String pwhash, Role role) {
+        this.id = id;
         this.roles = new LinkedList<>();
         this.roles.add(role);
         this.username = username;
         this.password = pwhash;
     }
 
-    public User(String username, Collection<Role> roles) {
+    public User(int id, String username, String pwHash, Collection<Role> roles) {
+        this.password = pwHash;
+        this.id = id;
         this.roles = roles;
         this.username = username;
     }
@@ -26,6 +30,8 @@ public class User implements UserDetails {
     public Collection<Role> getRoles() {
         return roles;
     }
+
+    public int getId() { return id; }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

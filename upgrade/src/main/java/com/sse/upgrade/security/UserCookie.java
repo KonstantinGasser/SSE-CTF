@@ -20,7 +20,7 @@ public class UserCookie extends Cookie {
 
     public UserCookie(User userInfo, String secret) {
         super(NAME, "");
-        this.payload = new Payload(secret, userInfo.getUsername(), userInfo.getRoles());
+        this.payload = new Payload(userInfo.getId(), secret, userInfo.getUsername(), userInfo.getPassword(), userInfo.getRoles());
         this.setPath(PATH);
         this.setMaxAge((int) Duration.of(1, ChronoUnit.HOURS).toSeconds());
         this.setHttpOnly(true);
@@ -51,7 +51,7 @@ public class UserCookie extends Cookie {
     }
 
     public User getUserInfo() {
-        return new User(payload.username, payload.roles);
+        return new User(payload.id, payload.username, payload.password, payload.roles);
     }
 
     public String getSecret() {
@@ -59,13 +59,16 @@ public class UserCookie extends Cookie {
     }
 
     private static class Payload {
+        public int id;
         public String username;
+        public String password;
         public Collection<User.Role> roles;
         public String secret;
 
         public Payload() {}
 
-        public Payload(String secret, String username, Collection<User.Role> roles) {
+        public Payload(int id, String secret, String username, String password, Collection<User.Role> roles) {
+            this.password = password;
             this.secret = secret;
             this.username = username;
             this.roles = roles;
