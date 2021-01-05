@@ -250,6 +250,25 @@ public class Controller {
     }
 
 
+
+    @Pruefungsamt
+    @PostMapping("/Pruefungamt/showPruefungen")
+    public ModelAndView addPruefung(@PathVariable("kurs") String kurs, @PathVariable("dozent") String dozent, @PathVariable("duedate") String zeitpunkt) {
+        User user = userService.getLoggedInUser();
+        ModelAndView mav = new ModelAndView();
+        List<Pruefung> allePruefungen = pruefungService.getAll();
+        mav.addObject("allePruefungen" , allePruefungen);
+
+
+        mav.addObject("username", user.getUsername());
+
+
+        return mav;
+
+
+    }
+
+
     /**
      * Die zwei Handler sind eine definierte Schwachstelle, nicht löschen!
      */

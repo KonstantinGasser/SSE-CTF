@@ -35,6 +35,13 @@ public class PruefungService {
     }
 
 
+
+    @Transactional(readOnly = true)
+    public List<Pruefung> getAll(){
+        return jdbcTemplate.query("select * from pruefung",new PruefungRowMapper());
+
+    }
+
     @Transactional
     public boolean anmelden(int pruefungID, int studentID){
        // String sql = "INSERT INTO teilnehmer (pruefung_id, user_id, note, comment) VALUES (pruefungID, studentID, 'NULL','NULL')";
@@ -62,6 +69,18 @@ public class PruefungService {
         }
 //        }
 //        return false;
+    }
+
+    @Transactional
+    public int pruefungHinzufügen(String kurs, int dozent, String zeitpunkt){
+
+        String sql ="INSERT INTO pruefung (kurs, dozent, due_date)" +
+                "VALUES (" + kurs + "," + dozent+ "," +zeitpunkt +")";
+          try {
+              return jdbcTemplate.update(sql);
+          }catch(Exception e){
+              return 0;
+          }
     }
 
     public class PruefungRowMapper implements RowMapper<Pruefung> {

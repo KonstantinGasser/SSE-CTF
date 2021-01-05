@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf" crossorigin="anonymous"></script>
+    <title>Prüfungen</title>
+</head>
+<body>
+<nav th:replace="fragments/navbar.html :: navbar"></nav>
+
+<div class="container mt-5">
+    <div class="form-row">
+        <div class="form-group col-2 ml-auto">
+            <div class="alert alert-primary" th:text="'Hello ' + ${username}"></div>
+        </div>
+    </div>
+    <div class="all-classes-container">
+        <h2>Prüfungen Übersicht</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Prüfungsnummer</th>
+                <th>Kurs</th>
+                <th>Dozent</th>
+                <th>Zeit</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="pruefung : ${allePruefungen}">
+                <td scope="row" th:text="${pruefung.getID()}"></td>
+                <td th:text="${pruefung.getKurs()}"></td>
+                <td th:text="${pruefung.getDozent()}"></td>
+                <td th:text="${pruefung.getPruefungsZeit()}"></td>
+
+            </tr>
+
+
+
+
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h2>Neue Pruefung anlegen</h2>
+
+        <form th:action="@{/addPruefung}" th:object="${employee}" method="POST">
+            <input  required  type="text"  placeholder="Kurs" class="form-control mb-4 col-4">
+            <input  required  type="text" placeholder="Dozent" class="form-control mb-4 col-4">
+            <input  required  type="text"  placeholder="Zeitpunkt Format: yyyy-MM-dd" class="form-control mb-4 col-4">
+
+            <button type="submit" class="btn btn-info col-2"> Prüfung anlegen</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
