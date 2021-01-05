@@ -254,18 +254,13 @@ public class Controller {
     @Pruefungsamt
     @PostMapping("/Pruefungamt/showPruefungen")
     public ModelAndView addPruefung(@PathVariable("kurs") String kurs, @PathVariable("dozent") String dozent, @PathVariable("duedate") String zeitpunkt) {
+        ModelAndView mav = new ModelAndView("template.pruefungsamt.pruefungen");
         User user = userService.getLoggedInUser();
-        ModelAndView mav = new ModelAndView();
+        mav.addObject("username", user.getUsername());
         List<Pruefung> allePruefungen = pruefungService.getAll();
         mav.addObject("allePruefungen" , allePruefungen);
 
-
-        mav.addObject("username", user.getUsername());
-
-
         return mav;
-
-
     }
 
 
