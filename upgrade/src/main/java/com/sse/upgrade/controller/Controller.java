@@ -252,13 +252,25 @@ public class Controller {
 
 
     @Pruefungsamt
-    @PostMapping("/Pruefungamt/showPruefungen")
-    public ModelAndView addPruefung(@PathVariable("kurs") String kurs, @PathVariable("dozent") String dozent, @PathVariable("duedate") String zeitpunkt) {
+    @GetMapping("/Pruefungamt/showPruefungen")
+    public ModelAndView showPruefung() {
         ModelAndView mav = new ModelAndView("template.pruefungsamt.pruefungen");
         User user = userService.getLoggedInUser();
         mav.addObject("username", user.getUsername());
         List<Pruefung> allePruefungen = pruefungService.getAll();
         mav.addObject("allePruefungen" , allePruefungen);
+
+        return mav;
+    }
+
+    @Pruefungsamt
+    @PostMapping("/addPruefung")
+    public ModelAndView addPruefung(@RequestParam("kurs") String kurs,@RequestParam("dozent") String dozent,@RequestParam("pruefungsZeit") String pruefungsZeitpunkt) {
+        ModelAndView mav = new ModelAndView("redirect:/Pruefungamt/showPruefungen");
+        User user = userService.getLoggedInUser();
+        mav.addObject("username", user.getUsername());
+        pruefungService.pruefungHinzufügen(kurs,dozent,pruefungsZeitpunkt);
+
 
         return mav;
     }

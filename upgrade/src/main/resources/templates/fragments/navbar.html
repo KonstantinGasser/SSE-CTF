@@ -31,6 +31,9 @@
             <li sec:authorize="hasAuthority('PROFESSOR')" class="nav-item">
                 <a class="nav-link" th:href="@{/pruefungen/prof}">Prüfungen</a>
             </li>
+            <li sec:authorize="hasAuthority('PRUEFUNGSAMT')" class="nav-item">
+                <a class="nav-link" th:href="@{/Pruefungamt/showPruefungen}">Prüfungen</a>
+            </li>
         </ul>
 <!--        <form class="form-inline my-2 my-lg-0">-->
 <!--            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">-->

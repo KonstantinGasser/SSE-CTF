@@ -17,7 +17,8 @@ INSERT INTO hs_user (id, username, hs_id, password_hash, role) VALUES
     (0, 'Niklas', 'ST0', 'fc5e038d38a57032085441e7fe7010b0', 'student'),
     (1, 'Luis', 'ST1', 'fc5e038d38a57032085441e7fe7010b0', 'student'),
     (2, 'Joni', 'PR0', 'fc5e038d38a57032085441e7fe7010b0', 'professor'),
-    (3, 'Tino', 'PR1', 'fc5e038d38a57032085441e7fe7010b0', 'professor');
+    (3, 'Tino', 'PR1', 'fc5e038d38a57032085441e7fe7010b0', 'professor'),
+    (4, 'Dobby', 'PU1', 'fc5e038d38a57032085441e7fe7010b0', 'pruefungsamt');
 
 
 

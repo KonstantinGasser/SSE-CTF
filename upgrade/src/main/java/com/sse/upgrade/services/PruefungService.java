@@ -72,12 +72,12 @@ public class PruefungService {
     }
 
     @Transactional
-    public int pruefungHinzufügen(String kurs, int dozent, String zeitpunkt){
+    public int pruefungHinzufügen(String kurs, String dozent, String zeitpunkt){
 
-        String sql ="INSERT INTO pruefung (kurs, dozent, due_date)" +
-                "VALUES (" + kurs + "," + dozent+ "," +zeitpunkt +")";
+        String sql ="INSERT INTO pruefung (kurs, dozent, due_date) " +
+                "VALUES (?,?,?)";
           try {
-              return jdbcTemplate.update(sql);
+              return jdbcTemplate.update(sql, kurs,dozent, zeitpunkt);
           }catch(Exception e){
               return 0;
           }

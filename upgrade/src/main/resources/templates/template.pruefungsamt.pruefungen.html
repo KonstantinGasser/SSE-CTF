@@ -48,10 +48,10 @@
     <div>
         <h2>Neue Pruefung anlegen</h2>
 
-        <form th:action="@{/addPruefung}" th:object="${employee}" method="POST">
-            <input  required  type="text"  placeholder="Kurs" class="form-control mb-4 col-4">
-            <input  required  type="text" placeholder="Dozent" class="form-control mb-4 col-4">
-            <input  required  type="text"  placeholder="Zeitpunkt Format: yyyy-MM-dd" class="form-control mb-4 col-4">
+        <form action=# th:action="@{/addPruefung}"  method="POST">
+            <input  required   type="text"  name="kurs" placeholder="Kurs" class="form-control mb-4 col-4">
+            <input  required   type="text" name="dozent" placeholder="Dozent" class="form-control mb-4 col-4">
+            <input  required   type="text"  name="pruefungsZeit" placeholder="Zeitpunkt Format: yyyy-MM-dd" class="form-control mb-4 col-4">
 
             <button type="submit" class="btn btn-info col-2"> Prüfung anlegen</button>
         </form>
