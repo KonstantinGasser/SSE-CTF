@@ -4,6 +4,7 @@ import com.sse.upgrade.example.BusinessLogik;
 import com.sse.upgrade.model.Note;
 import com.sse.upgrade.model.Pruefung;
 import com.sse.upgrade.model.User;
+import com.sse.upgrade.security.CookieSecurityContextRepository;
 import com.sse.upgrade.security.annotation.Professor;
 import com.sse.upgrade.security.annotation.Pruefungsamt;
 import com.sse.upgrade.security.annotation.Student;
@@ -23,8 +24,6 @@ import java.util.*;
 
 @RestController
 public class Controller {
-    @Autowired
-    JdbcTemplate jdbcTemplate;
 
     @Autowired
     UserService userService;
@@ -32,6 +31,9 @@ public class Controller {
     NotenService notenService;
     @Autowired
     PruefungService pruefungService;
+
+    @Autowired
+    CookieSecurityContextRepository cookieSecurityContextRepository;
 
     /*
     Index file:
@@ -45,6 +47,15 @@ public class Controller {
         ModelAndView mav = new ModelAndView("template.home");
         mav.addObject("permission", user.getRoles().contains(User.Role.PROFESSOR) ? "prof": "student");
         mav.addObject("username", user.getUsername());
+        return mav;
+    }
+
+    @GetMapping("/logout")
+    public ModelAndView logout() {
+        ModelAndView mav = new ModelAndView("redirect:/login");
+        this.cookieSecurityContextRepository.endSession(
+                (String) SecurityContextHolder.getContext().getAuthentication().getCredentials()
+        );
         return mav;
     }
     @Student
@@ -190,23 +201,6 @@ public class Controller {
         return mv.addObject("users", userService.getAll());
     }
 
-    // FRAGE? von wo wird die SQL-Injection getriggered?
-    @GetMapping("/studentNoten")
-        public ModelAndView studentNoten() {
-            ModelAndView mav = new ModelAndView("studentNoten");
-            List<Object> studentArray= new LinkedList<>();
-            //noch nicht fertig
-            studentArray.add(dbGibNoten(" "));
-            mav.addObject("studentArray", studentArray);
-            return mav;
-        }
-    public List<Map<String, Object>> dbGibNoten(String name) {
-        // VORSICHT! hier ist eine SQL Injection möglich
-        String sql = "select us.username as \"Name\",te.note as \"Note\",pr.kurs as \"Fach\" from(( teilnehmer te JOIN  pruefung pr ON pr.id = te.pruefung_id)JOIN hs_user us ON us.id = te.user_id )where us.username= 'Niklas'";
-        System.out.println(sql);
-        //System.out.println(jdbcTemplate.queryForList(sql));
-        return jdbcTemplate.queryForList(sql);
-    }
 
 
     @GetMapping("/studentAnmelden/{PRid}")
