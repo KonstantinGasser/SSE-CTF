@@ -25,7 +25,7 @@
             <td scope="row" th:text="${res.get('kurs')}"></td>
             <td th:text="${res.get('due_date')}"></td>
             <td>
-                <button class="btn btn-primary">
+                <button class="btn btn-outline-primary">
                     <a th:href="@{/pruefung/show/{id}(id=${res.get('id')})}" th:text="'bearbeiten'"></a>
                 </button>
             </td>

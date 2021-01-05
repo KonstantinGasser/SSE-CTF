@@ -50,7 +50,8 @@ public class UserService {
 
     public Boolean register(String username, String hs_id, String role, String password) {
         try {
-            jdbcTemplate.update("insert into hs_user(hs_id, username, password_hash, role) values(?,?,?,?)", hs_id, username, password, role);
+            String pwHash = DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8));
+            jdbcTemplate.update("insert into hs_user(hs_id, username, password_hash, role) values(?,?,?,?)", hs_id, username, pwHash, role);
         } catch(org.springframework.dao.DataAccessException err) {
             return false;
         }

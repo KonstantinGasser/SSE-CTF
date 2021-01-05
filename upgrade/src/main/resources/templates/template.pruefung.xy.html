@@ -33,18 +33,17 @@
                 <form action="#" th:action="@{/noten/add}" method="POST"> <!-- post with user_id-pruefung_id -->
                     <td scope="row" th:text="${res.get('uID')}"></td>
                     <td th:text="${res.get('u')}"></td>
-                    <td th:if="${res.get('n') != null}" th:text="${res.get('n')}"></td>
-                    <td th:if="${res.get('n') == null}">
-                        <input class="form-control" type="number" step="any" name="note" placeholder="Note">
+                    <td >
+                        <input class="form-control" type="number" step="any" name="note" placeholder="Note" th:value="${res.get('n')}">
                         <input type="hidden" name="uuid" th:value="${res.get('uID')}">
                         <input type="hidden" name="kurs" th:value="${_for}">
                     </td>
                     <td th:if="${res.get('c') != null}" th:utext="${res.get('c')}"></td>
                     <td th:if="${res.get('c') == null}">
-                        <textarea class="form-control" name="comment" placeholder="Comment zur Note"></textarea>
+                        <input class="form-control" name="comment" placeholder="Comment zur Note">
                     </td>
                     <td>
-                        <button th:if="${res.get('n') == null}" class="btn btn-primary" type="submit" th:text="'update'"></button>
+                        <button class="btn btn-primary" type="submit" th:text="'update'"></button>
                     </td>
                 </form>
             </tr>

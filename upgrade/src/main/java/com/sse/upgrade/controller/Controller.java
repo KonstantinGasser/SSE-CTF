@@ -74,7 +74,7 @@ public class Controller {
         mav.addObject("noten", noten);
 
         for (Note n : noten) {
-            n.setComment("<input class=\"form-control\" disabled value=\""+ n.getComment() +"\">");
+            n.setComment("<input class=\"form-control\" name=\"comment\" value=\""+ n.getComment() +"\">");
         }
         // if user is prof set allowed kurs for adding
         if (user.getRoles().contains(User.Role.PROFESSOR)) {
@@ -103,13 +103,32 @@ public class Controller {
 
         User user = userService.getLoggedInUser();
         mav.addObject("username", user.getUsername());
-        List<Map<String, String>> liste = notenService.getPruefungAndAngemelded(user.getId());
+        List<Map<String, Object>> liste = notenService.getPruefungAndAngemelded(user.getId());
 //        System.out.println(liste);
         mav.addObject("pruefungen", liste);
 
         return mav;
     }
 
+    @GetMapping("/pruefung/search")
+    public ModelAndView serveSearchResults(@RequestParam("query") String query) {
+        ModelAndView mav = new ModelAndView("template.pruefungen");
+
+        User user = userService.getLoggedInUser();
+        mav.addObject("username", user.getUsername());
+        List<Map<String, Object>> liste = new ArrayList<>();
+        try {
+            liste = notenService.getQuery(query, user.getId());
+        } catch(Exception e) {
+            mav.addObject("statusCode", 500);
+            mav.addObject("statusMessage", e);
+            return mav;
+        }
+        System.out.println(liste);
+        mav.addObject("pruefungen", liste);
+
+        return mav;
+    }
 
 
     @Professor
@@ -135,7 +154,7 @@ public class Controller {
 
         for (Map<String, Object> m : liste) {
             if(m.get("c") != null)
-                m.put("c", "<input class=\"form-control\" disabled value=\""+ m.get("c") +"\">");
+                m.put("c", "<input class=\"form-control\" name=\"comment\" value=\""+ m.get("c") +"\">");
         }
         mav.addObject("results", liste);
         mav.addObject("username", user.getUsername());
@@ -162,7 +181,7 @@ public class Controller {
     Um die Route zu sehen muss man eingeloggt sein.
     returns -> hidden_registration.html PostMapping onclick of submit form to createUser
  */
-    @GetMapping("/users/registration")
+    @GetMapping("/admin/registration")
     public ModelAndView serveHiddenRegistration() {
         ModelAndView mav = new ModelAndView("hidden_registration");
         return mav;

@@ -12,13 +12,22 @@
 <nav th:replace="fragments/navbar.html :: navbar"></nav>
 
 <div class="container mt-5">
-    <div class="form-row">
-        <div class="form-group col-2 ml-auto">
-            <div class="alert alert-primary" th:text="'Hello ' + ${username}"></div>
+    <div th:if="${statusMessage} != null" class="form-row">
+        <div class="form-group col-6 ml-auto mr-auto">
+            <div th:if="${statusCode == 404 || statusCode == 400}" class="alert alert-warning" role="alert" th:text="${statusMessage}"></div>
+            <div th:if="${statusCode == 500}" class="alert alert-danger" role="alert" th:text="${statusMessage}"></div>
+            <div th:if="${statusCode == 200}" class="alert alert-success" role="alert" th:text="${statusMessage}"></div>
         </div>
     </div>
-    <div class="contaienr">
-        <h2>Prüfungs Übersicht</h2>
+    </div>
+    <div class="container">
+        <div class="form-inline">
+            <h2>Prüfungs Übersicht</h2>
+            <form class="form-inline ml-2 my-lg-0" action="#" th:action="@{/pruefung/search}" method="GET">
+                <input class="form-control mr-sm-2" type="text" name="query" placeholder="Suche nach Prüfung" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
         <table class="table">
             <thead>
             <tr>
@@ -32,7 +41,7 @@
             <tr th:each="res : ${pruefungen}">
                 <td scope="row" th:text="${res.get('name')}"></td>
                 <td th:text="${res.get('user')}"></td>
-                <td>
+                <td th:if="${res.get('isAngemeldet')}">
                     <p th:if="${res.get('isAngemeldet') == '2'}" th:text="'bereits geschrieben'"></p>
                     <a class="btn btn-success" th:if="${res.get('isAngemeldet') == '0'}" th:text="'anmelden'" th:href="@{/studentAnmelden/{PRid}(PRid=${res.get('pruefung_id')})}" ></a>
                     <a class="btn btn-danger" th:if="${res.get('isAngemeldet') == '1'}" th:text="'abmelden'" th:href="@{/studentAbmelden/{PRid}(PRid=${res.get('pruefung_id')})}" ></a>

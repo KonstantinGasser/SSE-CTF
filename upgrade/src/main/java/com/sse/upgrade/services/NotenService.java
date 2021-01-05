@@ -99,34 +99,40 @@ public class NotenService {
     }
 
     @Transactional(readOnly = true)
-    public List<Map<String, String>> getPruefungAndAngemelded(int ID) {
-        String sqlPru = "select pruefung.id as \"pruefung_id\", pruefung.kurs as \"kurs\", hs_user.username as \"user\" from pruefung inner join hs_user on pruefung.dozent=hs_user.id;";
-        String sqlAn = "select pruefung_id, note from teilnehmer where user_id=? ";
-
-        List<Map<String, Object>> kurse = this.jdbcTemplate.queryForList(sqlPru);
-        List<Map<String, Object>> ang = this.jdbcTemplate.queryForList(sqlAn, ID);
-        List<Map<String, String>> res = new ArrayList<>();
-
-        for(Map<String, Object> map : kurse) {
-            int pID =  (int) map.get("pruefung_id");
-            Map<String, String> pr = new HashMap<>();
-            pr.put("pruefung_id",String.valueOf(pID));
-            pr.put("name", (String) map.get("kurs"));
-            pr.put("user", (String) map.get("user"));
-            pr.put("isAngemeldet",String.valueOf(0));
-
-
-            for (Map<String, Object> p : ang) {
-//                System.out.println(p.get("pruefung_id")+ " | " + pID + "->" + p.get("note"));
-                if ((int)p.get("pruefung_id") == pID && p.get("note") == null) {
-                    pr.put("isAngemeldet",String.valueOf(1));
-                    break;
-                } else if ((int)p.get("pruefung_id") == pID && p.get("note") != null) {
-                    pr.put("isAngemeldet",String.valueOf(2));
-                    break;
-                }
+    public List<Map<String, Object>> getQuery(String query, int uuid) {
+        String sql = "select hs_user.username as user, pruefung.kurs as name, t.user_id as teilID, t.note as note from pruefung " +
+                "inner join hs_user on pruefung.dozent=hs_user.id " +
+                "left join (select  user_id, note, pruefung_id from teilnehmer where user_id = "+uuid+") as t on pruefung.id=t.pruefung_id " +
+                "where hs_user.username = '"+query+"' or pruefung.kurs = '"+query+"'";
+        List<Map<String, Object>> res = new ArrayList<>();
+        for(Map<String, Object> m : this.jdbcTemplate.queryForList(sql)) {
+            if (m.get("teilID") == null) {
+                m.put("isAngemeldet", "0");
+            } else if(m.get("note") == null){
+                m.put("isAngemeldet", "1");
+            } else {
+                m.put("isAngemeldet", "2");
             }
-            res.add(pr);
+            res.add(m);
+        }
+        return res;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Map<String, Object>> getPruefungAndAngemelded(int ID) {
+        String sql = "select hs_user.username as user, pruefung.kurs as name, t.user_id as teilID, t.note as note from pruefung " +
+                "inner join hs_user on pruefung.dozent=hs_user.id " +
+                "left join (select  user_id, note, pruefung_id from teilnehmer where user_id = "+ID+") as t on pruefung.id=t.pruefung_id ";
+        List<Map<String, Object>> res = new ArrayList<>();
+        for(Map<String, Object> m : this.jdbcTemplate.queryForList(sql)) {
+            if (m.get("teilID") == null) {
+                m.put("isAngemeldet", "0");
+            } else if(m.get("note") == null){
+                m.put("isAngemeldet", "1");
+            } else {
+                m.put("isAngemeldet", "2");
+            }
+            res.add(m);
         }
         return res;
     }
