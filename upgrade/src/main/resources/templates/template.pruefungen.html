@@ -12,27 +12,35 @@
 <nav th:replace="fragments/navbar.html :: navbar"></nav>
 
 <div class="container mt-5">
-    <h2>Prüfungs Übersicht</h2>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Kurs</th>
-            <th>Professor</th>
-            <th>Action</th>
+    <div class="form-row">
+        <div class="form-group col-2 ml-auto">
+            <div class="alert alert-primary" th:text="'Hello ' + ${username}"></div>
+        </div>
+    </div>
+    <div class="contaienr">
+        <h2>Prüfungs Übersicht</h2>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Kurs</th>
+                <th>Professor</th>
+                <th>Action</th>
 
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="res : ${pruefungen}">
-            <td scope="row" th:text="${res.get('name')}"></td>
-            <td th:text="${res.get('user')}"></td>
-            <td>
-                <a class="btn btn-success" th:if="${res.get('isAngemeldet') == '0'}" th:text="'anmelden'" th:href="@{/studentAnmelden/{PRid}(PRid=${res.get('pruefung_id')})}" ></a><-- /anmelden/1 -->
-                <a class="btn btn-danger" th:if="${res.get('isAngemeldet') == '1'}" th:text="'abmelden'" th:href="@{/studentAbmelden/{PRid}(PRid=${res.get('pruefung_id')})}" ></a>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="res : ${pruefungen}">
+                <td scope="row" th:text="${res.get('name')}"></td>
+                <td th:text="${res.get('user')}"></td>
+                <td>
+                    <p th:if="${res.get('isAngemeldet') == '2'}" th:text="'bereits geschrieben'"></p>
+                    <a class="btn btn-success" th:if="${res.get('isAngemeldet') == '0'}" th:text="'anmelden'" th:href="@{/studentAnmelden/{PRid}(PRid=${res.get('pruefung_id')})}" ></a>
+                    <a class="btn btn-danger" th:if="${res.get('isAngemeldet') == '1'}" th:text="'abmelden'" th:href="@{/studentAbmelden/{PRid}(PRid=${res.get('pruefung_id')})}" ></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 </html>

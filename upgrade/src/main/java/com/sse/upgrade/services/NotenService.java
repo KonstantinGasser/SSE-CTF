@@ -68,11 +68,11 @@ public class NotenService {
         }
     }
 
-    public Boolean updateNote(String student, String comment, double note) {
-        String sql = "update teilnehmer set note=?, comment=? where user_id=?";
+    public Boolean updateNote(String student, String comment, double note, String kurs) {
+        String sql = "update teilnehmer set note=?, comment=? where user_id=? and pruefung_id=?";
 
         try {
-            this.jdbcTemplate.update(sql, note, comment, student);
+            this.jdbcTemplate.update(sql, note, comment, student, kurs);
         } catch(org.springframework.dao.DataAccessException err) {
             System.out.println(err);
             return false;
@@ -101,7 +101,7 @@ public class NotenService {
     @Transactional(readOnly = true)
     public List<Map<String, String>> getPruefungAndAngemelded(int ID) {
         String sqlPru = "select pruefung.id as \"pruefung_id\", pruefung.kurs as \"kurs\", hs_user.username as \"user\" from pruefung inner join hs_user on pruefung.dozent=hs_user.id;";
-        String sqlAn = "select pruefung_id from teilnehmer where user_id=?";
+        String sqlAn = "select pruefung_id, note from teilnehmer where user_id=? ";
 
         List<Map<String, Object>> kurse = this.jdbcTemplate.queryForList(sqlPru);
         List<Map<String, Object>> ang = this.jdbcTemplate.queryForList(sqlAn, ID);
@@ -109,17 +109,21 @@ public class NotenService {
 
         for(Map<String, Object> map : kurse) {
             int pID =  (int) map.get("pruefung_id");
-
             Map<String, String> pr = new HashMap<>();
             pr.put("pruefung_id",String.valueOf(pID));
-            pr.put("isAngemeldet",String.valueOf(0));
             pr.put("name", (String) map.get("kurs"));
             pr.put("user", (String) map.get("user"));
+            pr.put("isAngemeldet",String.valueOf(0));
 
 
             for (Map<String, Object> p : ang) {
-                if ((int)p.get("pruefung_id") == pID) {
+//                System.out.println(p.get("pruefung_id")+ " | " + pID + "->" + p.get("note"));
+                if ((int)p.get("pruefung_id") == pID && p.get("note") == null) {
                     pr.put("isAngemeldet",String.valueOf(1));
+                    break;
+                } else if ((int)p.get("pruefung_id") == pID && p.get("note") != null) {
+                    pr.put("isAngemeldet",String.valueOf(2));
+                    break;
                 }
             }
             res.add(pr);

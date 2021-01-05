@@ -44,7 +44,7 @@
                 <td th:if="${res.getNote() == 0.0}"></td>
                 <td th:if="${res.getNote() != 0.0}" th:text="${res.getNote()}"></td>
                 <td th:if="${res.getNote() == 0.0}" th:text="'Angemeldet'"></td>
-                <td th:if="${res.getNote() != 0.0}" th:text="${res.getComment()}"></td>
+                <td th:if="${res.getNote() != 0.0}" th:utext="${res.getComment()}"></td>
             </tr>
             </tbody>
         </table>

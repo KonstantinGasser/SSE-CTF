@@ -62,6 +62,9 @@ public class Controller {
         mav.addObject("username", user.getUsername());
         mav.addObject("noten", noten);
 
+        for (Note n : noten) {
+            n.setComment("<input class=\"form-control\" disabled value=\""+ n.getComment() +"\">");
+        }
         // if user is prof set allowed kurs for adding
         if (user.getRoles().contains(User.Role.PROFESSOR)) {
             List<String> kurse = notenService.getNotenByProf("2");
@@ -76,23 +79,6 @@ public class Controller {
         return mav;
     }
 
-    /*
-    add noten nimmt die request form und leitet diese weiter an den NotenService um die Note
-    einzutragen. Wenn der user falsche Eingaben macht wird eine error template returned
-//    TODO: call NotenService (write function in NotenService to process data)
-//     */
-//    @Professor
-//    @PostMapping("/noten/add")
-//    public ModelAndView addNewGrade(@RequestParam("kurs") String k, @RequestParam("for_id") String forID, @RequestParam("note") double note, @RequestParam("comment") String c) {
-//        if (k == null || k.equals("") || forID == null || forID.equals("") ||  note <= 0.0 || note >5.0) {
-//            ModelAndView mav = new ModelAndView("global_msg");
-//            mav.addObject("statusCode", 400);
-//            mav.addObject("statusMessage", "Fields are not correct");
-//            return mav;
-//        }
-//        System.out.println(" "+k+" "+forID+" "+note+" "+c);
-//        return new ModelAndView("redirect:/noten");
-//    }
 
     /*
     Entry point to show logged in user actions for notes
@@ -105,9 +91,11 @@ public class Controller {
         ModelAndView mav = new ModelAndView("template.pruefungen");
 
         User user = userService.getLoggedInUser();
-
+        mav.addObject("username", user.getUsername());
         List<Map<String, String>> liste = notenService.getPruefungAndAngemelded(user.getId());
+//        System.out.println(liste);
         mav.addObject("pruefungen", liste);
+
         return mav;
     }
 
@@ -133,6 +121,11 @@ public class Controller {
         ModelAndView mav = new ModelAndView("template.pruefung.xy");
         mav.addObject("_for", id);
         List<Map<String, Object>> liste = notenService.getPruefunAndStuden(id);
+
+        for (Map<String, Object> m : liste) {
+            if(m.get("c") != null)
+                m.put("c", "<input class=\"form-control\" disabled value=\""+ m.get("c") +"\">");
+        }
         mav.addObject("results", liste);
         mav.addObject("username", user.getUsername());
 
@@ -143,19 +136,11 @@ public class Controller {
     @PostMapping("/noten/add")
     public ModelAndView addNote(@RequestParam("uuid")String uuid, @RequestParam("kurs") String kurs, @RequestParam("note") double note, @RequestParam("comment") String comment) {
         User user =  userService.getLoggedInUser();
-        ModelAndView mav = new ModelAndView("global_msg");
-        String redirect = "/pruefung/show/"+kurs;
-        mav.addObject("redirect", redirect);
+        String redirect = "redirect:/pruefung/show/"+kurs;
+        ModelAndView mav = new ModelAndView(redirect);
         System.out.println(comment);
-        boolean success = notenService.updateNote(uuid, comment, note);
+        boolean success = notenService.updateNote(uuid, comment, note, kurs);
 
-        if (success) {
-            mav.addObject("statusCode", 200);
-            mav.addObject("statusMessage", "Note updated");
-            return mav;
-        }
-        mav.addObject("statusCode", 400);
-        mav.addObject("statusMessage", "ups");
         return mav;
 
     }
@@ -230,7 +215,7 @@ public class Controller {
             User user= userService.getLoggedInUser();
             pruefungService.anmelden(pruefungsID,user.getId());
 
-        System.out.println("Student mit ID" + user.getId() + "zu Pruefung " + pruefungsID + " angemeldet");
+            System.out.println("Student mit ID " + user.getId() + " zu Pruefung " + pruefungsID + " angemeldet");
 
             return mav;
     }
@@ -240,7 +225,7 @@ public class Controller {
         ModelAndView mav = new ModelAndView("redirect:/pruefungen");
         User user= userService.getLoggedInUser();
         pruefungService.abmelden(pruefungsID,user.getId());
-        System.out.println("Student mit ID" + user.getId() + " von Pruefung" + pruefungsID + " abgemeldet");
+        System.out.println("Student mit ID " + user.getId() + " von Pruefung" + pruefungsID + " abgemeldet");
 
         return mav;
     }

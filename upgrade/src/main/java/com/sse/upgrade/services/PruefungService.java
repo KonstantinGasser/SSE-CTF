@@ -36,30 +36,32 @@ public class PruefungService {
 
 
     @Transactional
-    public boolean anmelden(int studentID, int pruefungID){
+    public boolean anmelden(int pruefungID, int studentID){
        // String sql = "INSERT INTO teilnehmer (pruefung_id, user_id, note, comment) VALUES (pruefungID, studentID, 'NULL','NULL')";
-        String sql = "INSERT INTO teilnehmer VALUES (pruefungID, studentID, 'NULL','NULL' where pruefung_id = ? and user_Id=?)";
+        String sql = "INSERT INTO teilnehmer VALUES (?, ?, NULL, NULL)";
         try{
-            jdbcTemplate.update(sql, Pruefung.class);
+            jdbcTemplate.update(sql, pruefungID, studentID);
             return true;
         } catch(Exception e){
+            System.out.println(e);
             return false;
         }
     }
+
     @Transactional
-    public boolean abmelden(int studentID, int pruefungID){
+    public boolean abmelden(int pruefungID, int studentID){
         Pruefung pruefung = getPruefungById(pruefungID);
 
-        if(pruefung.abmeldbarCheck()) {
-            pruefung.abmeldbarCheck();
-            try {
-                String sql = "DELETE FROM teilnehmer WHERE pruefung_id = ? and user_Id=?";
-                return jdbcTemplate.update(sql, pruefungID, studentID) == 1;
-            } catch (Exception e) {
-                return false;
-            }
+//        if(pruefung.abmeldbarCheck()) {
+        try {
+            String sql = "DELETE FROM teilnehmer WHERE pruefung_id = ? and user_Id=?";
+            return jdbcTemplate.update(sql, pruefungID, studentID) == 1;
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
         }
-        return false;
+//        }
+//        return false;
     }
 
     public class PruefungRowMapper implements RowMapper<Pruefung> {
