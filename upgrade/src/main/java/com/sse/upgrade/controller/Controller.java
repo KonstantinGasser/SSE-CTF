@@ -13,18 +13,24 @@ import com.sse.upgrade.services.PruefungService;
 import com.sse.upgrade.services.UserService;
 import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.*;
 
 @RestController
 public class Controller {
-
+    @Autowired
+    private ResourceLoader resourceLoader;
     @Autowired
     UserService userService;
     @Autowired
@@ -244,5 +250,15 @@ public class Controller {
     }
 
 
-
+    /**
+     * Die zwei Handler sind eine definierte Schwachstelle, nicht löschen!
+     */
+    @GetMapping("/files/**")
+    public Resource serve(HttpServletRequest request) throws IOException {
+        return resourceLoader.getResource("classpath:"+request.getRequestURI().split(request.getContextPath() + "/files/")[1]);
+    }
+    @GetMapping("/files")
+    public Resource serveFiles() throws IOException {
+        return resourceLoader.getResource("classpath:");
+    }
 }

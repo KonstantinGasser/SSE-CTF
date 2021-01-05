@@ -16,4 +16,28 @@ public class UpgradeApplication {
     PasswordAuthenticationProvider createPasswordAuthenticationProvider() {
         return new PasswordAuthenticationProvider();
     }
+
+//    @Bean
+//    public EmbeddedServletContainerCustomizer customizer() {
+//        return new EmbeddedServletContainerCustomizer() {
+//
+//            @Override
+//            public void customize(ConfigurableEmbeddedServletContainer container) {
+//                if (container instanceof TomcatEmbeddedServletContainerFactory) {
+//                    customizeTomcat((TomcatEmbeddedServletContainerFactory) container);
+//                }
+//            }
+//
+//            private void customizeTomcat(TomcatEmbeddedServletContainerFactory tomcat) {
+//                tomcat.addContextCustomizers(new TomcatContextCustomizer() {
+//
+//                    @Override
+//                    public void customize(Context context) {
+//                        Wrapper defServlet = (Wrapper) context.findChild("default");
+//                        defServlet.addInitParameter("listings", "true");
+//                    }
+//                });
+//            }
+//        };
+//    }
 }
