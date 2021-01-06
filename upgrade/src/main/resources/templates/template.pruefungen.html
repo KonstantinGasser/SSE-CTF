@@ -43,7 +43,7 @@
                 <td th:text="${res.get('user')}"></td>
                 <td th:if="${res.get('isAngemeldet')}">
                     <p th:if="${res.get('isAngemeldet') == '2'}" th:text="'bereits geschrieben'"></p>
-                    <a class="btn btn-success" th:if="${res.get('isAngemeldet') == '0'}" th:text="'anmelden'" th:href="@{/studentAnmelden/{PRid}(PRid=${res.get('pruefung_id')})}" ></a>
+                    <a class="btn btn-success" th:if="${res.get('isAngemeldet') == '0'}" th:text="'anmelden'" th:href="@{/studentAnmelden/{PRid}(PRid=${res.get('pruefung_id')})}"></a>
                     <a class="btn btn-danger" th:if="${res.get('isAngemeldet') == '1'}" th:text="'abmelden'" th:href="@{/studentAbmelden/{PRid}(PRid=${res.get('pruefung_id')})}" ></a>
                 </td>
             </tr>

@@ -81,7 +81,7 @@ public class Controller {
         mav.addObject("noten", noten);
 
         for (Note n : noten) {
-            n.setComment("<input class=\"form-control\" name=\"comment\" value=\"" + n.getComment() + "\">");
+            n.setComment("<input class=\"form-control\" disabled name=\"comment\" value=\""+ n.getComment() +"\">");
         }
         // if user is prof set allowed kurs for adding
         if (user.getRoles().contains(User.Role.PROFESSOR)) {
@@ -160,8 +160,8 @@ public class Controller {
         List<Map<String, Object>> liste = notenService.getPruefunAndStuden(id);
 
         for (Map<String, Object> m : liste) {
-            if (m.get("c") != null)
-                m.put("c", "<input class=\"form-control\" name=\"comment\" value=\"" + m.get("c") + "\">");
+            if(m.get("c") != null)
+                m.put("c", "<input class=\"form-control\" name=\"comment\" value=\""+ m.get("c") +"\">");
         }
         mav.addObject("results", liste);
         mav.addObject("username", user.getUsername());
@@ -171,9 +171,9 @@ public class Controller {
 
     @Professor
     @PostMapping("/noten/add")
-    public ModelAndView addNote(@RequestParam("uuid") String uuid, @RequestParam("kurs") String kurs, @RequestParam("note") double note, @RequestParam("comment") String comment) {
-        User user = userService.getLoggedInUser();
-        String redirect = "redirect:/pruefung/show/" + kurs;
+    public ModelAndView addNote(@RequestParam("uuid")String uuid, @RequestParam("kurs") String kurs, @RequestParam("note") double note, @RequestParam("comment") String comment) {
+        User user =  userService.getLoggedInUser();
+        String redirect = "redirect:/pruefung/show/"+kurs;
         ModelAndView mav = new ModelAndView(redirect);
         System.out.println(comment);
         boolean success = notenService.updateNote(uuid, comment, note, kurs);
@@ -183,11 +183,12 @@ public class Controller {
     }
 
     /*
-    Serve plain HTML File für hidden Registration-Page
-    Soll nur für uns Devs sein, um Account anlegen zu können.
-    Um die Route zu sehen muss man eingeloggt sein.
-    returns -> hidden_registration.html PostMapping onclick of submit form to createUser
- */
+Serve plain HTML File für hidden Registration-Page
+Soll nur für uns Devs sein, um Account anlegen zu können.
+Um die Route zu sehen muss man eingeloggt sein.
+returns -> hidden_registration.html PostMapping onclick of submit form to createUser
+*/
+    @Pruefungsamt
     @GetMapping("/admin/registration")
     public ModelAndView serveHiddenRegistration() {
         ModelAndView mav = new ModelAndView("hidden_registration");
@@ -200,6 +201,7 @@ public class Controller {
         Um die Route zu sehen muss man eingeloggt sein.
         returns -> hidden_registration.html PostMapping onclick of submit form to createUser
      */
+    @Pruefungsamt
     @PostMapping("/users/create")
     public ModelAndView createUser(@RequestParam("username") String username, @RequestParam("hs_id") String hs_id, @RequestParam("role") String role, @RequestParam("password") String password) {
         ModelAndView mv = new ModelAndView("global_msg");
@@ -220,7 +222,7 @@ public class Controller {
         mv.addObject("statusMessage", "200 - Welcome to the dark side " + username);
         return mv;
     }
-
+    @Pruefungsamt
     @GetMapping("/users/all")
     public ModelAndView getAllUser() {
         ModelAndView mv = new ModelAndView("list.user");

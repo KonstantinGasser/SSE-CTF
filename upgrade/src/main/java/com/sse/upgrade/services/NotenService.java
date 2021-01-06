@@ -100,7 +100,7 @@ public class NotenService {
 
     @Transactional(readOnly = true)
     public List<Map<String, Object>> getQuery(String query, int uuid) {
-        String sql = "select hs_user.username as user, pruefung.kurs as name, t.user_id as teilID, t.note as note from pruefung " +
+        String sql = "select hs_user.username as user, pruefung.kurs as name, t.user_id as teilID, t.note as note, pruefung.id as pruefung_id from pruefung " +
                 "inner join hs_user on pruefung.dozent=hs_user.id " +
                 "left join (select  user_id, note, pruefung_id from teilnehmer where user_id = "+uuid+") as t on pruefung.id=t.pruefung_id " +
                 "where hs_user.username = '"+query+"' or pruefung.kurs = '"+query+"'";
@@ -120,7 +120,7 @@ public class NotenService {
 
     @Transactional(readOnly = true)
     public List<Map<String, Object>> getPruefungAndAngemelded(int ID) {
-        String sql = "select hs_user.username as user, pruefung.kurs as name, t.user_id as teilID, t.note as note from pruefung " +
+        String sql = "select hs_user.username as user, pruefung.kurs as name, t.user_id as teilID, t.note as note, pruefung.id as pruefung_id from pruefung " +
                 "inner join hs_user on pruefung.dozent=hs_user.id " +
                 "left join (select  user_id, note, pruefung_id from teilnehmer where user_id = "+ID+") as t on pruefung.id=t.pruefung_id ";
         List<Map<String, Object>> res = new ArrayList<>();
