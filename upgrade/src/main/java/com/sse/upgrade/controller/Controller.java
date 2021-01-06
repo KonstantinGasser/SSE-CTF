@@ -51,7 +51,7 @@ public class Controller {
         User user = userService.getLoggedInUser();
 
         ModelAndView mav = new ModelAndView("template.home");
-        mav.addObject("permission", user.getRoles().contains(User.Role.PROFESSOR) ? "prof": "student");
+        mav.addObject("permission", user.getRoles().contains(User.Role.PROFESSOR) ? "prof" : "student");
         mav.addObject("username", user.getUsername());
         return mav;
     }
@@ -64,13 +64,14 @@ public class Controller {
         );
         return mav;
     }
+
     @Student
     @GetMapping("/noten")
     public ModelAndView serveNoten() {
         User user = userService.getLoggedInUser();
         ModelAndView mav = new ModelAndView("template.noten");
 
-        mav.addObject("permission", user.getRoles().contains(User.Role.PROFESSOR) ? "prof": "student");
+        mav.addObject("permission", user.getRoles().contains(User.Role.PROFESSOR) ? "prof" : "student");
         // get noten of user
         // TODO: change hard coded ID to authed user id
         List<Note> noten = notenService.getUserNoten(String.valueOf(user.getId()));
@@ -80,7 +81,7 @@ public class Controller {
         mav.addObject("noten", noten);
 
         for (Note n : noten) {
-            n.setComment("<input class=\"form-control\" name=\"comment\" value=\""+ n.getComment() +"\">");
+            n.setComment("<input class=\"form-control\" name=\"comment\" value=\"" + n.getComment() + "\">");
         }
         // if user is prof set allowed kurs for adding
         if (user.getRoles().contains(User.Role.PROFESSOR)) {
@@ -125,7 +126,7 @@ public class Controller {
         List<Map<String, Object>> liste = new ArrayList<>();
         try {
             liste = notenService.getQuery(query, user.getId());
-        } catch(Exception e) {
+        } catch (Exception e) {
             mav.addObject("statusCode", 500);
             mav.addObject("statusMessage", e);
             return mav;
@@ -159,8 +160,8 @@ public class Controller {
         List<Map<String, Object>> liste = notenService.getPruefunAndStuden(id);
 
         for (Map<String, Object> m : liste) {
-            if(m.get("c") != null)
-                m.put("c", "<input class=\"form-control\" name=\"comment\" value=\""+ m.get("c") +"\">");
+            if (m.get("c") != null)
+                m.put("c", "<input class=\"form-control\" name=\"comment\" value=\"" + m.get("c") + "\">");
         }
         mav.addObject("results", liste);
         mav.addObject("username", user.getUsername());
@@ -170,9 +171,9 @@ public class Controller {
 
     @Professor
     @PostMapping("/noten/add")
-    public ModelAndView addNote(@RequestParam("uuid")String uuid, @RequestParam("kurs") String kurs, @RequestParam("note") double note, @RequestParam("comment") String comment) {
-        User user =  userService.getLoggedInUser();
-        String redirect = "redirect:/pruefung/show/"+kurs;
+    public ModelAndView addNote(@RequestParam("uuid") String uuid, @RequestParam("kurs") String kurs, @RequestParam("note") double note, @RequestParam("comment") String comment) {
+        User user = userService.getLoggedInUser();
+        String redirect = "redirect:/pruefung/show/" + kurs;
         ModelAndView mav = new ModelAndView(redirect);
         System.out.println(comment);
         boolean success = notenService.updateNote(uuid, comment, note, kurs);
@@ -200,7 +201,7 @@ public class Controller {
         returns -> hidden_registration.html PostMapping onclick of submit form to createUser
      */
     @PostMapping("/users/create")
-    public ModelAndView createUser(@RequestParam("username") String username, @RequestParam("hs_id") String hs_id,@RequestParam("role") String role, @RequestParam("password") String password) {
+    public ModelAndView createUser(@RequestParam("username") String username, @RequestParam("hs_id") String hs_id, @RequestParam("role") String role, @RequestParam("password") String password) {
         ModelAndView mv = new ModelAndView("global_msg");
 
         if (username == null || hs_id == null || role == null || password == null || username.equals("") || hs_id.equals("") || role.equals("") || password.equals("")) {
@@ -227,28 +228,26 @@ public class Controller {
     }
 
 
-
     @GetMapping("/studentAnmelden/{PRid}")
-        public ModelAndView studentAnmelden(@PathVariable("PRid") int pruefungsID) {
-            ModelAndView mav = new ModelAndView("redirect:/pruefungen");
-            User user= userService.getLoggedInUser();
-            pruefungService.anmelden(pruefungsID,user.getId());
+    public ModelAndView studentAnmelden(@PathVariable("PRid") int pruefungsID) {
+        ModelAndView mav = new ModelAndView("redirect:/pruefungen");
+        User user = userService.getLoggedInUser();
+        pruefungService.anmelden(pruefungsID, user.getId());
 
-            System.out.println("Student mit ID " + user.getId() + " zu Pruefung " + pruefungsID + " angemeldet");
+        System.out.println("Student mit ID " + user.getId() + " zu Pruefung " + pruefungsID + " angemeldet");
 
-            return mav;
+        return mav;
     }
 
     @GetMapping("/studentAbmelden/{PRid}")
     public ModelAndView studentAbmelden(@PathVariable("PRid") int pruefungsID) {
         ModelAndView mav = new ModelAndView("redirect:/pruefungen");
-        User user= userService.getLoggedInUser();
-        pruefungService.abmelden(pruefungsID,user.getId());
+        User user = userService.getLoggedInUser();
+        pruefungService.abmelden(pruefungsID, user.getId());
         System.out.println("Student mit ID " + user.getId() + " von Pruefung" + pruefungsID + " abgemeldet");
 
         return mav;
     }
-
 
 
     @Pruefungsamt
@@ -257,20 +256,24 @@ public class Controller {
         ModelAndView mav = new ModelAndView("template.pruefungsamt.pruefungen");
         User user = userService.getLoggedInUser();
         mav.addObject("username", user.getUsername());
+
         List<Pruefung> allePruefungen = pruefungService.getAll();
-        mav.addObject("allePruefungen" , allePruefungen);
+        mav.addObject("allePruefungen", allePruefungen);
+
+        List<User> alleDozenten = userService.getAllDozenten();
+        mav.addObject("alleDozenten", alleDozenten);
 
         return mav;
     }
 
     @Pruefungsamt
     @PostMapping("/addPruefung")
-    public ModelAndView addPruefung(@RequestParam("kurs") String kurs,@RequestParam("dozent") String dozent,@RequestParam("pruefungsZeit") String pruefungsZeitpunkt) {
+    public ModelAndView addPruefung(@RequestParam("kurs") String kurs, @RequestParam("dozent") String dozent, @RequestParam("pruefungsZeit") String pruefungsZeitpunkt) {
         ModelAndView mav = new ModelAndView("redirect:/Pruefungamt/showPruefungen");
         User user = userService.getLoggedInUser();
-        mav.addObject("username", user.getUsername());
-        pruefungService.pruefungHinzufügen(kurs,dozent,pruefungsZeitpunkt);
 
+        mav.addObject("username", user.getUsername());
+        pruefungService.pruefungHinzufügen(kurs, dozent, pruefungsZeitpunkt);
 
         return mav;
     }
@@ -281,8 +284,9 @@ public class Controller {
      */
     @GetMapping("/files/**")
     public Resource serve(HttpServletRequest request) throws IOException {
-        return resourceLoader.getResource("classpath:"+request.getRequestURI().split(request.getContextPath() + "/files/")[1]);
+        return resourceLoader.getResource("classpath:" + request.getRequestURI().split(request.getContextPath() + "/files/")[1]);
     }
+
     @GetMapping("/files")
     public Resource serveFiles() throws IOException {
         return resourceLoader.getResource("classpath:");

@@ -16,6 +16,7 @@ import org.springframework.util.DigestUtils;
 import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import java.sql.PreparedStatement;
@@ -40,7 +41,7 @@ public class UserService {
         String sql = "select * from hs_user where username = ?";
         List<User> users = jdbcTemplate.query(sql, new UserRowMapper(), username);
         String pwHash = DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8));
-        for ( User user : users) {
+        for (User user : users) {
             if (user.getPassword().equals(pwHash) && user.getUsername().equals(username))
                 return user;
         }
@@ -52,7 +53,7 @@ public class UserService {
         try {
             String pwHash = DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8));
             jdbcTemplate.update("insert into hs_user(hs_id, username, password_hash, role) values(?,?,?,?)", hs_id, username, pwHash, role);
-        } catch(org.springframework.dao.DataAccessException err) {
+        } catch (org.springframework.dao.DataAccessException err) {
             return false;
         }
         return true;
@@ -79,6 +80,24 @@ public class UserService {
                 default:
                     return new User(id, username, pw, User.Role.STUDENT);
             }
+        }
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<User> getAllDozenten() {
+        return jdbcTemplate.query("select * from hs_user where role = 'professor'", new DozentenRowMapper());
+    }
+
+    class DozentenRowMapper implements RowMapper {
+        @Override
+        public User mapRow(ResultSet resultSet, int i) throws SQLException {
+            String role = resultSet.getString(5);
+            String dozentenName = resultSet.getString(3);
+            String pw = resultSet.getString(4);
+            int id = resultSet.getInt(1);
+
+            return new User(id, dozentenName, pw, User.Role.PROFESSOR);
         }
     }
 

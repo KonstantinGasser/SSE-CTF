@@ -35,28 +35,27 @@ public class PruefungService {
     }
 
 
-
     @Transactional(readOnly = true)
-    public List<Pruefung> getAll(){
-        return jdbcTemplate.query("select * from pruefung",new PruefungRowMapper());
+    public List<Pruefung> getAll() {
+        return jdbcTemplate.query("select * from pruefung", new PruefungRowMapper());
 
     }
 
     @Transactional
-    public boolean anmelden(int pruefungID, int studentID){
-       // String sql = "INSERT INTO teilnehmer (pruefung_id, user_id, note, comment) VALUES (pruefungID, studentID, 'NULL','NULL')";
+    public boolean anmelden(int pruefungID, int studentID) {
+        // String sql = "INSERT INTO teilnehmer (pruefung_id, user_id, note, comment) VALUES (pruefungID, studentID, 'NULL','NULL')";
         String sql = "INSERT INTO teilnehmer VALUES (?, ?, NULL, NULL)";
-        try{
+        try {
             jdbcTemplate.update(sql, pruefungID, studentID);
             return true;
-        } catch(Exception e){
+        } catch (Exception e) {
             System.out.println(e);
             return false;
         }
     }
 
     @Transactional
-    public boolean abmelden(int pruefungID, int studentID){
+    public boolean abmelden(int pruefungID, int studentID) {
         Pruefung pruefung = getPruefungById(pruefungID);
 
 //        if(pruefung.abmeldbarCheck()) {
@@ -72,15 +71,15 @@ public class PruefungService {
     }
 
     @Transactional
-    public int pruefungHinzufügen(String kurs, String dozent, String zeitpunkt){
+    public int pruefungHinzufügen(String kurs, String dozent, String zeitpunkt) {
 
-        String sql ="INSERT INTO pruefung (kurs, dozent, due_date) " +
+        String sql = "INSERT INTO pruefung (kurs, dozent, due_date) " +
                 "VALUES (?,?,?)";
-          try {
-              return jdbcTemplate.update(sql, kurs,dozent, zeitpunkt);
-          }catch(Exception e){
-              return 0;
-          }
+        try {
+            return jdbcTemplate.update(sql, kurs, dozent, zeitpunkt);
+        } catch (Exception e) {
+            return 0;
+        }
     }
 
     public class PruefungRowMapper implements RowMapper<Pruefung> {
@@ -99,7 +98,7 @@ public class PruefungService {
             long time = date.getTime();
             Timestamp timestamp = new Timestamp(time);
 
-            return new Pruefung(rs.getInt("id"),rs.getString("kurs"),rs.getInt("dozent"),timestamp);
+            return new Pruefung(rs.getInt("id"), rs.getString("kurs"), rs.getInt("dozent"), timestamp);
         }
 
 
