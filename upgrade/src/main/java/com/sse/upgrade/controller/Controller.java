@@ -1,6 +1,5 @@
 package com.sse.upgrade.controller;
 
-import com.sse.upgrade.example.BusinessLogik;
 import com.sse.upgrade.model.Note;
 import com.sse.upgrade.model.Pruefung;
 import com.sse.upgrade.model.User;
@@ -11,21 +10,17 @@ import com.sse.upgrade.security.annotation.Student;
 import com.sse.upgrade.services.NotenService;
 import com.sse.upgrade.services.PruefungService;
 import com.sse.upgrade.services.UserService;
-import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.*;
 
 @RestController
@@ -283,27 +278,31 @@ public class Controller {
 
 
     @GetMapping("/accountSettings")
-    public ModelAndView accountSettings() {
+    public ModelAndView accountSettings(HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("template.accountSettings");
         User user = userService.getLoggedInUser();
         mav.addObject("username", user.getUsername());
-        mav.addObject("pwOK", 2);
+        Map<String, ?> inputFlashMap = RequestContextUtils.getInputFlashMap(request);
+        if (inputFlashMap != null && inputFlashMap.get("pwOK") != null) {
+            mav.addObject(inputFlashMap.get("pwOK"));
+        } else {
+            mav.addObject("pwOK", 2);
+        }
         return mav;
     }
 
 
     @PostMapping("/accountSettings/pwAendern")
     public ModelAndView pwAendern(@RequestParam("oldPW") String altesPw, @RequestParam("newPW") String neuesPw, RedirectAttributes redirectAttributes) {
-        int passt=0;
+        int pwOK=0;
         ModelAndView mav = new ModelAndView("redirect:/accountSettings");
         User user = userService.getLoggedInUser();
         mav.addObject("username", user.getUsername());
-        System.out.println(altesPw + " " +neuesPw);
         if (userService.changePassword(altesPw, neuesPw, user.getId())
         ) {
-            passt=1;
+            pwOK=1;
         }
-        redirectAttributes.addAttribute("pwOK", passt);
+        redirectAttributes.addFlashAttribute("pwOK", pwOK);
 
         return mav;
     }

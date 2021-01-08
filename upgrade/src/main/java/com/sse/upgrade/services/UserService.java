@@ -1,11 +1,8 @@
 package com.sse.upgrade.services;
 
 import com.sse.upgrade.model.User;
-import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,10 +13,8 @@ import org.springframework.util.DigestUtils;
 import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import java.sql.PreparedStatement;
 
 @Service
 public class UserService {
@@ -48,7 +43,7 @@ public class UserService {
         throw new BadCredentialsException("Username or Password incorrect");
     }
 
-
+    @Transactional
     public Boolean register(String username, String hs_id, String role, String password) {
         try {
             String pwHash = DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8));
@@ -59,31 +54,20 @@ public class UserService {
         return true;
     }
 
+    @Transactional
     public boolean changePassword(String oldPw, String newPw, int userID) {
-
         String sql = "SELECT * FROM hs_user WHERE id=?";
         try {
             List<User> users = jdbcTemplate.query(sql, new UserRowMapper(), userID);
-            System.out.println(users.get(0).getPassword());
             if (DigestUtils.md5DigestAsHex(oldPw.getBytes(StandardCharsets.UTF_8)).equals(users.get(0).getPassword())) {
-                try {
-                    String newPwHash = DigestUtils.md5DigestAsHex(newPw.getBytes(StandardCharsets.UTF_8));
-                    jdbcTemplate.update("UPDATE hs_user SET password_hash = ? WHERE id=?", newPwHash, userID);
-                    return true;
-
-                } catch (Exception e) {
-                    System.out.println(e);
-                    return false;
-                }
-
+                String newPwHash = DigestUtils.md5DigestAsHex(newPw.getBytes(StandardCharsets.UTF_8));
+                jdbcTemplate.update("UPDATE hs_user SET password_hash = ? WHERE id=?", newPwHash, userID);
+                return true;
             }
         } catch (Exception e) {
-
-            System.out.println(e);
             return false;
         }
         return false;
-
     }
 
     @Transactional(readOnly = true)
