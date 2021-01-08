@@ -37,11 +37,6 @@ public class Controller {
     @Autowired
     CookieSecurityContextRepository cookieSecurityContextRepository;
 
-    /*
-    Index file:
-        - redirect to after login
-        - navigation to different function of the application
-     */
     @GetMapping("/")
     public ModelAndView serveIndex() {
         User user = userService.getLoggedInUser();
@@ -113,6 +108,7 @@ public class Controller {
         return mav;
     }
 
+    @Student
     @GetMapping("/pruefung/search")
     public ModelAndView serveSearchResults(@RequestParam("query") String query) {
         ModelAndView mav = new ModelAndView("template.pruefungen");
@@ -184,7 +180,7 @@ public class Controller {
     Um die Route zu sehen muss man eingeloggt sein.
     returns -> hidden_registration.html PostMapping onclick of submit form to createUser
     */
-    @GetMapping("/admin/registration")
+    @GetMapping("/admin")
     public ModelAndView serveHiddenRegistration() {
         ModelAndView mav = new ModelAndView("hidden_registration");
         return mav;
@@ -224,6 +220,7 @@ public class Controller {
     }
 
 
+    @Student
     @GetMapping("/studentAnmelden/{PRid}")
     public ModelAndView studentAnmelden(@PathVariable("PRid") int pruefungsID) {
         ModelAndView mav = new ModelAndView("redirect:/pruefungen");

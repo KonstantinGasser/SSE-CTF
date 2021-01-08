@@ -33,7 +33,8 @@ public class NotenService {
             }
         }, ID);
     }
-    /*
+
+    /**
     Fetch Noten based on user ID
     returns List<Noten>
      */
@@ -48,7 +49,7 @@ public class NotenService {
         return this.jdbcTemplate.query(sql, new NoteRowMapper(), ID);
     }
 
-    /*
+    /**
     mapper for this sql:
     select pruefung.kurs, pruefung.dozent, teilnehmer.note, teilnehmer.comment
         from teilnehmer
@@ -68,6 +69,7 @@ public class NotenService {
         }
     }
 
+    @Transactional
     public Boolean updateNote(String student, String comment, double note, String kurs) {
         String sql = "update teilnehmer set note=?, comment=? where user_id=? and pruefung_id=?";
 

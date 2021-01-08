@@ -108,7 +108,6 @@ public class UserService {
         }
     }
 
-
     @Transactional(readOnly = true)
     public List<User> getAllDozenten() {
         return jdbcTemplate.query("select * from hs_user where role = 'professor'", new DozentenRowMapper());
@@ -126,10 +125,7 @@ public class UserService {
         }
     }
 
-
     public User getLoggedInUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
-
-
 }

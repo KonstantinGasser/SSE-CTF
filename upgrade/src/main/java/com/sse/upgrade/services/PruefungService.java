@@ -27,13 +27,11 @@ public class PruefungService {
         this.jdbcTemplate = temp;
     }
 
-
     @Transactional(readOnly = true)
     public Pruefung getPruefungById(int id) {
         return jdbcTemplate.queryForObject(
                 "select * from pruefung where id=?", new PruefungRowMapper(), id);
     }
-
 
     @Transactional(readOnly = true)
     public List<Pruefung> getAll() {
@@ -85,8 +83,6 @@ public class PruefungService {
     public class PruefungRowMapper implements RowMapper<Pruefung> {
         @Override
         public Pruefung mapRow(ResultSet rs, int rowNum) throws SQLException {
-
-
             String dueDate = rs.getString("due_date");
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date date = null;
@@ -100,8 +96,5 @@ public class PruefungService {
 
             return new Pruefung(rs.getInt("id"), rs.getString("kurs"), rs.getInt("dozent"), timestamp);
         }
-
-
     }
-
 }

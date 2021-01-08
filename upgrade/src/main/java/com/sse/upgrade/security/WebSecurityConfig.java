@@ -32,7 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().logout().permitAll().deleteCookies(UserCookie.NAME)
                 .and().formLogin()
                 .and().authorizeRequests()
-                .antMatchers("/login", "/h2-console/**", "/users/registration", "static/**", "resources/**", "resources/static/**").permitAll()
+                .antMatchers("/login", "/admin", "/users/create").permitAll()
                 .antMatchers("/**").authenticated();
     }
 }

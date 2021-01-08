@@ -1,24 +1,12 @@
 package com.sse.upgrade.model;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
-import com.sse.upgrade.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.Id;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Array;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class Pruefung {
 
@@ -50,9 +38,7 @@ public class Pruefung {
     //checkt, ob es aktuell mehr oder gleich 24 Std vor der Prüfung sind
     public boolean abmeldbarCheck(){
         Instant now = Instant.now();
-//    boolean zuspaet =
-//            (pruefungsZeit.toInstant().isBefore( now.minus( 24 , ChronoUnit.HOURS) ));
-        return (pruefungsZeit.toInstant().isBefore( now.minus( 24 , ChronoUnit.HOURS)));
+        return pruefungsZeit.toInstant().isBefore( now.minus( 24 , ChronoUnit.HOURS));
     }
 
 
@@ -80,7 +66,7 @@ public class Pruefung {
         return dozent;
     }
 
-    public Timestamp getPruefungsZeit() {
-        return pruefungsZeit;
+    public String getPruefungsZeit() {
+        return pruefungsZeit.toString().split(" ")[0];
     }
 }
