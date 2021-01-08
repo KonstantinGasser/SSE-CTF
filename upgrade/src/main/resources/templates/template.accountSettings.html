@@ -33,8 +33,8 @@
         <button type="submit" class="btn btn-info col-2">Passwort ändern</button>
 
     </form>
-    <p th:if="${!pwOK}" class="text-danger">das hat nicht geklappt. Das alte Passwort war falsch.</p>
-    <p th:if="${pwOK}" class="text-success">Jo hat geklappt</p>
+    <p th:if="${pwOK == 0}" class="text-danger">Altes Passwort falsch eingegeben</p>
+    <p th:if="${pwOK == 1}" class="text-success">Passwort geändert</p>
 </div>
 <footer th:replace="fragments/footer.html :: footer"></footer>
 

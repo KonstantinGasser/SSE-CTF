@@ -287,21 +287,21 @@ public class Controller {
         ModelAndView mav = new ModelAndView("template.accountSettings");
         User user = userService.getLoggedInUser();
         mav.addObject("username", user.getUsername());
-        mav.addObject("pwOK", false);
+        mav.addObject("pwOK", 2);
         return mav;
     }
 
 
     @PostMapping("/accountSettings/pwAendern")
     public ModelAndView pwAendern(@RequestParam("oldPW") String altesPw, @RequestParam("newPW") String neuesPw, RedirectAttributes redirectAttributes) {
-        boolean passt=false;
+        int passt=0;
         ModelAndView mav = new ModelAndView("redirect:/accountSettings");
         User user = userService.getLoggedInUser();
         mav.addObject("username", user.getUsername());
         System.out.println(altesPw + " " +neuesPw);
         if (userService.changePassword(altesPw, neuesPw, user.getId())
         ) {
-            passt=true;
+            passt=1;
         }
         redirectAttributes.addAttribute("pwOK", passt);
 
