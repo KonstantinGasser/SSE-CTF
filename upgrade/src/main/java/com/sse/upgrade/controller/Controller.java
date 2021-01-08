@@ -281,6 +281,33 @@ returns -> hidden_registration.html PostMapping onclick of submit form to create
     }
 
 
+    @GetMapping("/accountSettings")
+    public ModelAndView accountSettings() {
+        ModelAndView mav = new ModelAndView("template.accountSettings");
+        User user = userService.getLoggedInUser();
+        mav.addObject("username", user.getUsername());
+
+        return mav;
+    }
+
+
+    @PostMapping("/accountSettings/pwAendern")
+    public ModelAndView pwAendern(@RequestParam("oldPw") String altesPw, @RequestParam("newPw") String neuesPw) {
+        boolean passt=false;
+        ModelAndView mav = new ModelAndView("redirect:/accountSettings");
+        User user = userService.getLoggedInUser();
+        mav.addObject("username", user.getUsername());
+
+        if (userService.changePassword(altesPw, neuesPw, user.getId())
+        ) {
+            passt=true;
+        }
+        mav.addObject("pwOK", passt);
+
+        return mav;
+    }
+
+
     /**
      * Die zwei Handler sind eine definierte Schwachstelle, nicht löschen!
      */

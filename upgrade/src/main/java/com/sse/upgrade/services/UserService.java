@@ -59,6 +59,29 @@ public class UserService {
         return true;
     }
 
+    public boolean changePassword(String oldPw, String newPw, int userID) {
+
+        String sql = "SELECT passwort FROM hs_user WHERE ID=?";
+        try {
+
+            if (DigestUtils.md5DigestAsHex(oldPw.getBytes(StandardCharsets.UTF_8)).equals(jdbcTemplate.queryForObject(sql, new Object[]{userID}, String.class))) {
+                try {
+                    String newPwHash = DigestUtils.md5DigestAsHex(newPw.getBytes(StandardCharsets.UTF_8));
+                    jdbcTemplate.update("UPDATE hs_user SET password_hash = newPwHash WHERE ID=?", userID);
+                    return true;
+
+                } catch (Exception e) {
+                    return false;
+                }
+
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return false;
+
+    }
+
     @Transactional(readOnly = true)
     public List<User> getAll() {
         return jdbcTemplate.query("select * from hs_user", new UserRowMapper());
@@ -105,4 +128,6 @@ public class UserService {
     public User getLoggedInUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
+
+
 }

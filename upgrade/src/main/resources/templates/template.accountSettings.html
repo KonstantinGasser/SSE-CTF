@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+            integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"
+            integrity="sha384-LtrjvnR4Twt/qOuYxE721u19sVFLVSA4hf/rRt6PrZTmiPltdZcI7q7PXQBYTKyf"
+            crossorigin="anonymous"></script>
+    <title>Einstellungen</title>
+</head>
+<body>
+<nav th:replace="fragments/navbar.html :: navbar"></nav>
+<div class="container mt-5">
+    <div class="form-row">
+        <div class="form-group col-2 ml-auto">
+            <div class="alert alert-primary" th:text="'Hello ' + ${username}"></div>
+        </div>
+    </div>
+</div>
+
+
+<h2>Password ändern</h2><br>
+<form th:action="@{/accountSettings/pwAendern}" method="POST">
+
+    <input type="text" placeholder="altes Passwort" name="oldPW" class="form-control mb-4 col-4"><br>
+    <input type="text" placeholder="neues Passwort" name="newPw" class="form-control mb-4 col-4">
+    <button type="submit" class="btn btn-info col-2"> Passwort ändern</button>
+
+</form>
+<p class="text-danger">das hat nicht geklappt. Das alte Passwort war falsch.</p>
+<footer th:replace="fragments/footer.html :: footer"></footer>
+
+</body>
+</html>
