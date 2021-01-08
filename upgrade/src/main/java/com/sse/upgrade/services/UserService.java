@@ -55,6 +55,20 @@ public class UserService {
     }
 
     @Transactional
+    public boolean deleteUser(String id) {
+        try {
+            this.jdbcTemplate.update("delete from teilnehmer as t " +
+                    "where t.user_id=? or t.pruefung_id in (select id from pruefung where dozent = ?)", id, id);
+            this.jdbcTemplate.update("delete from pruefung where dozent=?", id);
+            this.jdbcTemplate.update("delete from hs_user where id=?", id);
+        } catch (Exception err) {
+            System.out.println(err);
+            return false;
+        }
+        return true;
+    }
+
+    @Transactional
     public boolean changePassword(String oldPw, String newPw, int userID) {
         String sql = "SELECT * FROM hs_user WHERE id=?";
         try {

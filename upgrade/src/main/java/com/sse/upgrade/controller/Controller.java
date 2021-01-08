@@ -184,7 +184,6 @@ public class Controller {
     Um die Route zu sehen muss man eingeloggt sein.
     returns -> hidden_registration.html PostMapping onclick of submit form to createUser
     */
-    @Pruefungsamt
     @GetMapping("/admin/registration")
     public ModelAndView serveHiddenRegistration() {
         ModelAndView mav = new ModelAndView("hidden_registration");
@@ -197,7 +196,6 @@ public class Controller {
         Um die Route zu sehen muss man eingeloggt sein.
         returns -> hidden_registration.html PostMapping onclick of submit form to createUser
      */
-    @Pruefungsamt
     @PostMapping("/users/create")
     public ModelAndView createUser(@RequestParam("username") String username, @RequestParam("hs_id") String hs_id, @RequestParam("role") String role, @RequestParam("password") String password) {
         ModelAndView mv = new ModelAndView("global_msg");
@@ -307,6 +305,38 @@ public class Controller {
         return mav;
     }
 
+    @Pruefungsamt
+    @GetMapping("/Pruefungamt/useraccounts")
+    public ModelAndView serveUserAccounts() {
+        ModelAndView mav = new ModelAndView("template.pruefungsamt.addaccount");
+        User user = userService.getLoggedInUser();
+        List<User> users = userService.getAll();
+        mav.addObject("users", users);
+        mav.addObject("myID", user.getId());
+        return mav;
+    }
+
+    @Pruefungsamt
+    @PostMapping("/pwusers/create")
+    public ModelAndView PAcreateUser(@RequestParam("username") String username, @RequestParam("hs_id") String hs_id, @RequestParam("role") String role, @RequestParam("password") String password) {
+        ModelAndView mv = new ModelAndView("redirect:/Pruefungamt/useraccounts");
+
+        if (username == null || hs_id == null || role == null || password == null || username.equals("") || hs_id.equals("") || role.equals("") || password.equals("")) {
+            return mv;
+        }
+
+        userService.register(username, hs_id, role, password);
+
+        return mv;
+    }
+
+    @Pruefungsamt
+    @PostMapping("/users/delete")
+    public ModelAndView deleteUser(@RequestParam("user_id") String id) {
+        ModelAndView mav = new ModelAndView("redirect:/Pruefungamt/useraccounts");
+        userService.deleteUser(id);
+        return mav;
+    }
 
     /**
      * Die zwei Handler sind eine definierte Schwachstelle, nicht löschen!

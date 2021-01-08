@@ -40,6 +40,9 @@
             <li sec:authorize="hasAuthority('PRUEFUNGSAMT')" class="nav-item">
                 <a class="nav-link" th:href="@{/Pruefungamt/showPruefungen}">Prüfungen</a>
             </li>
+            <li sec:authorize="hasAuthority('PRUEFUNGSAMT')" class="nav-item">
+                <a class="nav-link" th:href="@{/Pruefungamt/useraccounts}">User Accounts</a>
+            </li>
             <li  class="nav-item">
                 <a class="nav-link" th:href="@{/accountSettings}">Einstellungen</a>
             </li>
