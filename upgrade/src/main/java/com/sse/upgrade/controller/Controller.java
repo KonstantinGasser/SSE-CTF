@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -183,11 +184,11 @@ public class Controller {
     }
 
     /*
-Serve plain HTML File für hidden Registration-Page
-Soll nur für uns Devs sein, um Account anlegen zu können.
-Um die Route zu sehen muss man eingeloggt sein.
-returns -> hidden_registration.html PostMapping onclick of submit form to createUser
-*/
+    Serve plain HTML File für hidden Registration-Page
+    Soll nur für uns Devs sein, um Account anlegen zu können.
+    Um die Route zu sehen muss man eingeloggt sein.
+    returns -> hidden_registration.html PostMapping onclick of submit form to createUser
+    */
     @Pruefungsamt
     @GetMapping("/admin/registration")
     public ModelAndView serveHiddenRegistration() {
@@ -286,23 +287,23 @@ returns -> hidden_registration.html PostMapping onclick of submit form to create
         ModelAndView mav = new ModelAndView("template.accountSettings");
         User user = userService.getLoggedInUser();
         mav.addObject("username", user.getUsername());
-
+        mav.addObject("pwOK", false);
         return mav;
     }
 
 
     @PostMapping("/accountSettings/pwAendern")
-    public ModelAndView pwAendern(@RequestParam("oldPw") String altesPw, @RequestParam("newPw") String neuesPw) {
+    public ModelAndView pwAendern(@RequestParam("oldPW") String altesPw, @RequestParam("newPW") String neuesPw, RedirectAttributes redirectAttributes) {
         boolean passt=false;
         ModelAndView mav = new ModelAndView("redirect:/accountSettings");
         User user = userService.getLoggedInUser();
         mav.addObject("username", user.getUsername());
-
+        System.out.println(altesPw + " " +neuesPw);
         if (userService.changePassword(altesPw, neuesPw, user.getId())
         ) {
             passt=true;
         }
-        mav.addObject("pwOK", passt);
+        redirectAttributes.addAttribute("pwOK", passt);
 
         return mav;
     }

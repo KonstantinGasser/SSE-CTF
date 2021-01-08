@@ -24,15 +24,18 @@
 </div>
 
 
-<h2>Password ändern</h2><br>
-<form th:action="@{/accountSettings/pwAendern}" method="POST">
+<div class="container">
+    <h2>Password ändern</h2><br>
+    <form th:action="@{/accountSettings/pwAendern}" method="POST">
 
-    <input type="text" placeholder="altes Passwort" name="oldPW" class="form-control mb-4 col-4"><br>
-    <input type="text" placeholder="neues Passwort" name="newPw" class="form-control mb-4 col-4">
-    <button type="submit" class="btn btn-info col-2"> Passwort ändern</button>
+        <input type="password" placeholder="altes Passwort" name="oldPW" class="form-control mb-4 col-4"><br>
+        <input type="password" placeholder="neues Passwort" name="newPW" class="form-control mb-4 col-4">
+        <button type="submit" class="btn btn-info col-2">Passwort ändern</button>
 
-</form>
-<p class="text-danger">das hat nicht geklappt. Das alte Passwort war falsch.</p>
+    </form>
+    <p th:if="${!pwOK}" class="text-danger">das hat nicht geklappt. Das alte Passwort war falsch.</p>
+    <p th:if="${pwOK}" class="text-success">Jo hat geklappt</p>
+</div>
 <footer th:replace="fragments/footer.html :: footer"></footer>
 
 </body>

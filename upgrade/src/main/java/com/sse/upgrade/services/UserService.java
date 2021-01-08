@@ -61,21 +61,25 @@ public class UserService {
 
     public boolean changePassword(String oldPw, String newPw, int userID) {
 
-        String sql = "SELECT passwort FROM hs_user WHERE ID=?";
+        String sql = "SELECT * FROM hs_user WHERE id=?";
         try {
-
-            if (DigestUtils.md5DigestAsHex(oldPw.getBytes(StandardCharsets.UTF_8)).equals(jdbcTemplate.queryForObject(sql, new Object[]{userID}, String.class))) {
+            List<User> users = jdbcTemplate.query(sql, new UserRowMapper(), userID);
+            System.out.println(users.get(0).getPassword());
+            if (DigestUtils.md5DigestAsHex(oldPw.getBytes(StandardCharsets.UTF_8)).equals(users.get(0).getPassword())) {
                 try {
                     String newPwHash = DigestUtils.md5DigestAsHex(newPw.getBytes(StandardCharsets.UTF_8));
-                    jdbcTemplate.update("UPDATE hs_user SET password_hash = newPwHash WHERE ID=?", userID);
+                    jdbcTemplate.update("UPDATE hs_user SET password_hash = ? WHERE id=?", newPwHash, userID);
                     return true;
 
                 } catch (Exception e) {
+                    System.out.println(e);
                     return false;
                 }
 
             }
         } catch (Exception e) {
+
+            System.out.println(e);
             return false;
         }
         return false;
