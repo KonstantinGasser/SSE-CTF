@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -321,15 +322,40 @@ public class Controller {
     }
 
     /**
-     * Die zwei Handler sind eine definierte Schwachstelle, nicht löschen!
+     * Die vier Handler sind eine definierte Schwachstelle, nicht löschen!
      */
     @GetMapping("/files/**")
-    public Resource serve(HttpServletRequest request) throws IOException {
-        return resourceLoader.getResource("classpath:" + request.getRequestURI().split(request.getContextPath() + "/files/")[1]);
+    public ModelAndView serveDir(HttpServletRequest request) throws IOException {
+        try {
+            String file = request.getRequestURI().split(request.getContextPath() + "/files/")[1];
+            if (file.equals("static")) return new ModelAndView("files_static");
+            if (file.equals("static/css")) return new ModelAndView("files_static_css");
+            if (file.equals("static/js")) return new ModelAndView("files_static_js");
+            return new ModelAndView("forward:/file/" + file);
+        } catch (Exception e) {
+            ModelAndView mav = new ModelAndView("global_msg");
+            mav.addObject("statusCode", 404);
+            mav.addObject("statusMessage", "404 - File not found!");
+            return mav;
+        }
+    }
+
+    @GetMapping("/file/**")
+    public Resource serveFile(HttpServletRequest request) throws IOException {
+        String file = request.getRequestURI().split(request.getContextPath() + "/file/")[1];
+        return resourceLoader.getResource("classpath:" + file);
     }
 
     @GetMapping("/files")
-    public Resource serveFiles() throws IOException {
-        return resourceLoader.getResource("classpath:");
+    public ModelAndView serveFiles() throws IOException {
+        return new ModelAndView("files");
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ModelAndView fileNotFound() {
+        ModelAndView mav = new ModelAndView("global_msg");
+        mav.addObject("statusCode", 404);
+        mav.addObject("statusMessage", "404 - File not found!");
+        return mav;
     }
 }

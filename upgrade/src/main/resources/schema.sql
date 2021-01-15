@@ -7,7 +7,7 @@ CREATE TABLE hs_user (
     id INT AUTO_INCREMENT PRIMARY KEY,
     hs_id VARCHAR(25),
     username VARCHAR(25),
-    password_hash VARCHAR(128),
+    password_hash VARCHAR(256),
     role VARCHAR(15)
 );
 

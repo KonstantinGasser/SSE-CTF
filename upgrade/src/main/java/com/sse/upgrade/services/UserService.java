@@ -1,6 +1,7 @@
 package com.sse.upgrade.services;
 
 import com.sse.upgrade.model.User;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -8,7 +9,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
@@ -35,7 +35,7 @@ public class UserService {
     public User login(String username, String password) {
         String sql = "select * from hs_user where username = ?";
         List<User> users = jdbcTemplate.query(sql, new UserRowMapper(), username);
-        String pwHash = DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8));
+        String pwHash = DigestUtils.sha256Hex(password.getBytes(StandardCharsets.UTF_8));
         for (User user : users) {
             if (user.getPassword().equals(pwHash) && user.getUsername().equals(username))
                 return user;
@@ -46,7 +46,7 @@ public class UserService {
     @Transactional
     public Boolean register(String username, String hs_id, String role, String password) {
         try {
-            String pwHash = DigestUtils.md5DigestAsHex(password.getBytes(StandardCharsets.UTF_8));
+            String pwHash = DigestUtils.sha256Hex(password.getBytes(StandardCharsets.UTF_8));
             jdbcTemplate.update("insert into hs_user(hs_id, username, password_hash, role) values(?,?,?,?)", hs_id, username, pwHash, role);
         } catch (org.springframework.dao.DataAccessException err) {
             return false;
@@ -73,8 +73,8 @@ public class UserService {
         String sql = "SELECT * FROM hs_user WHERE id=?";
         try {
             List<User> users = jdbcTemplate.query(sql, new UserRowMapper(), userID);
-            if (DigestUtils.md5DigestAsHex(oldPw.getBytes(StandardCharsets.UTF_8)).equals(users.get(0).getPassword())) {
-                String newPwHash = DigestUtils.md5DigestAsHex(newPw.getBytes(StandardCharsets.UTF_8));
+            if (DigestUtils.sha256Hex(oldPw.getBytes(StandardCharsets.UTF_8)).equals(users.get(0).getPassword())) {
+                String newPwHash = DigestUtils.sha256Hex(newPw.getBytes(StandardCharsets.UTF_8));
                 jdbcTemplate.update("UPDATE hs_user SET password_hash = ? WHERE id=?", newPwHash, userID);
                 return true;
             }
