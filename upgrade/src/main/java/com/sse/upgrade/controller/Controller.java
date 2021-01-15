@@ -184,18 +184,18 @@ public class Controller {
 
         if (username == null || hs_id == null || role == null || password == null || username.equals("") || hs_id.equals("") || role.equals("") || password.equals("")) {
             mv.addObject("statusCode", 400);
-            mv.addObject("statusMessage", "400 - This request stinks bad dude!");
+            mv.addObject("statusMessage", "400 - Bad Request (this request stinks!)");
             return mv;
         }
 
         if (!userService.register(username, hs_id, role, password)) {
             mv.addObject("statusCode", 500);
-            mv.addObject("statusMessage", "500 - Yes the backend team messed up ~ sry");
+            mv.addObject("statusMessage", "500 - Internal Server Error (sorry)");
             return mv;
         }
 
         mv.addObject("statusCode", 200);
-        mv.addObject("statusMessage", "200 - Welcome to the dark side " + username);
+        mv.addObject("statusMessage", "200 - Ok (user created)" + username);
         return mv;
     }
     @Pruefungsamt
