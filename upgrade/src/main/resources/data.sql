@@ -5,11 +5,11 @@
 -- noinspection SqlNoDataSourceInspection,SqlDialectInspection
 
 INSERT INTO hs_user (id, username, hs_id, password_hash, role) VALUES
-    (0, 'Student', 'ST0', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'student'), -- password
+    (0, 'Niklas', 'ST0', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'student'), -- password
     (1, 'Luis', 'ST1', '936a185caaa266bb9cbe981e9e05cb78cd732b0b3280eb944412bb6f8f8f07af', 'student'), -- helloworld
     (2, 'Joni', 'PR0', '936a185caaa266bb9cbe981e9e05cb78cd732b0b3280eb944412bb6f8f8f07af', 'professor'), -- helloworld
     (3, 'Tino', 'PR1', 'd694f5fddff440905653ebd4569239e67563b01bfaab31ec87f5758efb61523a', 'professor'), -- thisissecure
-    (4, 'Dobby', 'PU1', 'd694f5fddff440905653ebd4569239e67563b01bfaab31ec87f5758efb61523a', 'pruefungsamt'), -- thisissecure
+    (4, 'Peter', 'PU1', 'd694f5fddff440905653ebd4569239e67563b01bfaab31ec87f5758efb61523a', 'pruefungsamt'), -- thisissecure
     (5, 'user', '000', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 'pruefungsamt'); -- password
 
 
