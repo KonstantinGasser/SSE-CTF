@@ -11,8 +11,10 @@
 <body>
 
     <div class="container">
+        <h2>Developer Admin Panel</h2>
         <form action="#" th:action="@{/users/create}" method="POST">
             <div class="w-25 mt-5 ml-auto mr-auto">
+                <h4>Create a new user:</h4>
                 <div class="form-row">
                     <div class="form-group col">
                         <input type="text" name="username" placeholder="username", class="form-control">
@@ -28,7 +30,7 @@
                     <div class="form-group col">
                         <select name="role" class="custom-select">
                             <option selected value="student">Student</option>
-                            <option value="professor">Prof</option>
+                            <option value="professor">Professor</option>
                             <option value="pruefungsamt">Prüfungsamt</option>
                         </select>
                     </div>

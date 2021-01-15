@@ -2,23 +2,10 @@
 
 -- noinspection SqlNoDataSourceInspectionForFile
 
--- CREATE TABLE pruefung (
---     id INT AUTO_INCREMENT PRIMARY KEY,
---     name VARCHAR(250) NOT NULL
--- );
-
--- CREATE TABLE note (
---     id INT AUTO_INCREMENT PRIMARY KEY,
---     pruefung_id INT,
---     note INT NOT NULL,
---     comment VARCHAR(500),
---     FOREIGN KEY(pruefung_id) REFERENCES pruefung(id)
--- );
-
 
 CREATE TABLE hs_user (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    hs_id VARCHAR(3),
+    hs_id VARCHAR(25),
     username VARCHAR(25),
     password_hash VARCHAR(128),
     role VARCHAR(15)
@@ -45,5 +32,3 @@ CREATE TABLE teilnehmer (
 
 
 -- select hs_user.username from teilnehmer left join pruefung on teilnehmer.pruefung_id=pruefung.id
-
-

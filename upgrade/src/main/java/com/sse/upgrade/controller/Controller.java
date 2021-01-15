@@ -63,8 +63,6 @@ public class Controller {
         ModelAndView mav = new ModelAndView("template.noten");
 
         mav.addObject("permission", user.getRoles().contains(User.Role.PROFESSOR) ? "prof" : "student");
-        // get noten of user
-        // TODO: change hard coded ID to authed user id
         List<Note> noten = notenService.getUserNoten(String.valueOf(user.getId()));
 
         // set noten for given user
@@ -87,7 +85,6 @@ public class Controller {
 
         return mav;
     }
-
 
     /*
     Entry point to show logged in user actions for notes
@@ -172,18 +169,6 @@ public class Controller {
 
         return mav;
 
-    }
-
-    /*
-    Serve plain HTML File für hidden Registration-Page
-    Soll nur für uns Devs sein, um Account anlegen zu können.
-    Um die Route zu sehen muss man eingeloggt sein.
-    returns -> hidden_registration.html PostMapping onclick of submit form to createUser
-    */
-    @GetMapping("/admin")
-    public ModelAndView serveHiddenRegistration() {
-        ModelAndView mav = new ModelAndView("hidden_registration");
-        return mav;
     }
 
     /*
