@@ -1,13 +1,12 @@
 # SSE-CTF
 SSE CTF Project: Notenverwaltungssystem
 
-# Postgres (DB) with Docker
-## Building Postgres Docker image
-```docker build -t sse_postgres .```
-!Wichtig! dieses Command muss im Directory, in dem das `Dockerfile` liegt ausgeführt werden! <br>
-```docker run --publish 5432:5432 --name upgrade_database sse_postgres```
-- --name upgrade_database -> Name, den wir dem Container gebene, sonst container hash..
-- sse_postgres -> Das ist die Referenze zu dem Image das wir zuvor gebaut haben. Das haben wir mit `-t sse_postgres` dem Namen `sse_postgres` gegeben.
+# Lecture: SSE (Secure Software Engineering)
+Idea after learning how to build secure software and the processes and mechanisims behind that we build our own "app".
+Here we documented how we build the software, what we did to ensure security issues were tested and documented. `However` we should also include 5 `bug` or `security` issues so the teams afterwards could hack each other :o. 
+ Our security issues:
+- missconfiguration -> leftover dev route to add users
+- missconfiguration -> directory traversal
+- SQL-Injection -> query to search for grades
+- XSS -> in comment a prof could set while setting a grade for a student
 
-```docker exec -it upgrade_database bash``` -> zugreifen auf den Shell des Containers
-```psql -U db_user_name -d db_name``` -> damit kommt man in die postgres prompt und kann dort SQL-Commands direkt auf der Datenbank ausgeführt
